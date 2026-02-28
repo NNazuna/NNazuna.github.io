@@ -97,24 +97,62 @@ window.addEventListener('DOMContentLoaded', () => {
   if (data.jumlahPorsi) document.getElementById('jumlahPorsi').value = data.jumlahPorsi;
 });
 
+// --- Tabel Bahan Baku Dinamis ---
+function addBahanRow(data = {}) {
+  const tbody = document.getElementById('bahanTableBody');
+  const tr = document.createElement('tr');
+  tr.innerHTML = `
+    <td><input type="text" class="bahan-nama w-full" value="${data.nama || ''}" /></td>
+    <td><input type="number" class="bahan-jumlah w-full" value="${data.jumlah || ''}" min="0" /></td>
+    <td>
+      <select class="bahan-satuan w-full">
+        <option value="gr" ${data.satuan==='gr'?'selected':''}>gr</option>
+        <option value="kg" ${data.satuan==='kg'?'selected':''}>kg</option>
+        <option value="ml" ${data.satuan==='ml'?'selected':''}>ml</option>
+        <option value="pcs" ${data.satuan==='pcs'?'selected':''}>pcs</option>
+      </select>
+    </td>
+    <td><input type="number" class="bahan-harga w-full" value="${data.harga || ''}" min="0" /></td>
+    <td><button class="remove-bahan btn-wiracalc px-2 py-1 rounded"><i class="fas fa-trash"></i></button></td>
+  `;
+  tbody.appendChild(tr);
+  tr.querySelector('.remove-bahan').onclick = () => tr.remove();
+}
+document.getElementById('addBahanRow').onclick = () => addBahanRow();
+
+// --- Kalkulasi dari Tabel Bahan Baku ---
+function getTotalBahanBaku() {
+  let total = 0;
+  Array.from(document.querySelectorAll('#bahanTableBody tr')).forEach(tr => {
+    const jumlah = parseFloat(tr.querySelector('.bahan-jumlah').value) || 0;
+    const harga = parseFloat(tr.querySelector('.bahan-harga').value) || 0;
+    total += jumlah * harga;
+  });
+  return total;
+}
+
 // --- Submit form: Hitung dan tampilkan hasil ---
 document.getElementById('form').addEventListener('submit', e => {
   e.preventDefault();
   const namaProduk = document.getElementById('namaProduk').value;
-  const bahanBaku = parseFloat(document.getElementById('bahanBaku').getAttribute('data-value') || '0');
-  const biayaMasak = parseFloat(document.getElementById('biayaMasak').getAttribute('data-value') || '0');
+  const totalBahanBaku = getTotalBahanBaku();
+  const biayaOperasional = parseFloat(document.getElementById('biayaOperasional').value) || 0;
   const margin = parseFloat(document.getElementById('margin').value) || 0;
   const jumlahPorsi = parseInt(document.getElementById('jumlahPorsi').value) || 1;
 
   // Validasi input
-  const pesan = validasiInput({bahanBaku, biayaMasak, margin, jumlahPorsi});
+  let pesan = '';
+  if (totalBahanBaku < 100) pesan += 'Total biaya bahan baku terlalu kecil.\n';
+  if (biayaOperasional < 0) pesan += 'Biaya operasional tidak boleh negatif.\n';
+  if (margin < 5) pesan += 'Margin keuntungan sebaiknya di atas 5%.\n';
+  if (jumlahPorsi < 1) pesan += 'Jumlah porsi minimal 1.\n';
   if (pesan) {
     alert(pesan);
     return;
   }
 
   // Hitung total modal
-  const totalModal = bahanBaku + biayaMasak;
+  const totalModal = totalBahanBaku + biayaOperasional;
   // Hitung harga jual per porsi
   const hargaJualPerPorsi = (totalModal * (1 + margin / 100)) / jumlahPorsi;
   // Hitung total keuntungan
