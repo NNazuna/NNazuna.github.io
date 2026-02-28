@@ -11,169 +11,151 @@
   <link rel="stylesheet" href="style.css">
   <link rel="manifest" href="manifest.json">
 </head>
-<body class="min-h-screen gradient-bg">
-  <div class="dashboard-container flex flex-col md:flex-row max-w-screen-xl mx-auto min-h-screen">
-    <!-- Sidebar -->
-    <aside class="sidebar bg-white/80 glass-card w-full md:w-72 p-6 flex-shrink-0 border-r border-gray-200">
-      <h2 class="text-xl font-bold text-indigo-700 mb-6 flex items-center gap-2"><i class="fas fa-sliders-h"></i> Pengaturan</h2>
-      <div class="mb-6">
-        <label class="block font-semibold mb-2 text-gray-700">Currency Symbol</label>
-        <input type="text" id="currency" value="Rp" class="w-full border-2 border-gray-200 rounded-lg px-4 py-2 focus:outline-none focus:border-indigo-500" />
+<body class="min-h-screen flex items-center justify-center p-4 gradient-bg">
+  <div class="w-full max-w-md mx-auto">
+    <!-- Hero/Introduction -->
+    <section class="bg-white rounded-2xl shadow-2xl p-6 mb-6 animate-fadeInUp">
+      <div class="text-center mb-4">
+        <div class="inline-block p-3 bg-gradient-to-r from-purple-500 to-indigo-600 rounded-full mb-2">
+          <i class="fas fa-calculator text-white text-3xl"></i>
+        </div>
+        <h1 class="text-2xl md:text-3xl font-bold text-indigo-700 mb-2">Digitalisasi Perhitungan Biaya dengan <span class="text-purple-600">WiraCalc</span></h1>
+        <p class="text-gray-600 text-base md:text-lg">Inovasi ini mengedepankan penggunaan aplikasi WiraCalc sebagai alat bantu untuk melakukan kalkulasi biaya secara otomatis, transparan, dan akurat, guna meminimalisir kesalahan manual dalam pengelolaan usaha.</p>
       </div>
-      <div class="mb-6">
-        <label class="block font-semibold mb-2 text-gray-700">Target Margin Default (%)</label>
-        <input type="number" id="defaultMargin" value="30" min="0" class="w-full border-2 border-gray-200 rounded-lg px-4 py-2 focus:outline-none focus:border-indigo-500" />
+      <div class="flex flex-col gap-3 mt-4">
+        <div class="flex items-center gap-2">
+          <span class="inline-block p-2 bg-purple-100 rounded-full"><i class="fas fa-bolt text-purple-600"></i></span>
+          <span class="font-semibold text-gray-700">Otomatisasi:</span>
+          <span class="text-gray-500">Menghitung modal dan harga jual dalam sekejap.</span>
+        </div>
+        <div class="flex items-center gap-2">
+          <span class="inline-block p-2 bg-indigo-100 rounded-full"><i class="fas fa-eye text-indigo-600"></i></span>
+          <span class="font-semibold text-gray-700">Transparansi:</span>
+          <span class="text-gray-500">Menghasilkan rincian biaya yang jelas dan terbuka.</span>
+        </div>
+        <div class="flex items-center gap-2">
+          <span class="inline-block p-2 bg-yellow-100 rounded-full"><i class="fas fa-check-circle text-yellow-500"></i></span>
+          <span class="font-semibold text-gray-700">Akurasi:</span>
+          <span class="text-gray-500">Menghindari kesalahan hitung manual yang berisiko pada kerugian usaha.</span>
+        </div>
       </div>
-      <div class="mb-6">
-        <h3 class="font-bold text-gray-700 mb-2">Produk Tersimpan</h3>
-        <ul id="savedProducts" class="text-sm text-gray-600"></ul>
+    </section>
+    <!-- Kalkulator Box -->
+    <div class="bg-white p-8 rounded-2xl shadow-2xl animate-fadeInUp">
+      <div class="text-center mb-8">
+        <div class="inline-block p-3 bg-gradient-to-r from-purple-500 to-indigo-600 rounded-full mb-4">
+          <i class="fas fa-calculator text-white text-3xl"></i>
+        </div>
+        <h2 class="text-2xl font-bold text-indigo-700 mb-2">WiraCalc</h2>
+        <p class="text-gray-500 text-sm">Hitung biaya dan keuntungan dengan mudah & profesional</p>
       </div>
-      <div class="mb-6">
-        <h3 class="font-bold text-gray-700 mb-2">Excel Templates</h3>
-        <button class="w-full btn-wiracalc mb-2"><i class="fas fa-file-excel mr-2"></i>Template Produksi (F&B)</button>
-        <button class="w-full btn-wiracalc mb-2"><i class="fas fa-file-excel mr-2"></i>Template Distributor</button>
-        <button class="w-full btn-wiracalc"><i class="fas fa-file-excel mr-2"></i>Template Jasa/Service</button>
-      </div>
-      <div class="mb-6">
-        <h3 class="font-bold text-gray-700 mb-2">Import Data</h3>
-        <input type="file" id="importFile" accept=".csv,.xlsx,.xls" class="w-full border-2 border-gray-200 rounded-lg px-4 py-2" />
-        <small class="text-xs text-gray-500">Limit 2MB, .xlsx/.csv</small>
-      </div>
-    </aside>
-    <!-- Main Content -->
-    <main class="main-content flex-1 p-4 md:p-10">
-      <div class="main-grid grid grid-cols-1 md:grid-cols-2 gap-8">
-        <!-- Introduction & Tujuan -->
-        <section class="glass-card p-6 animate-fadeInUp">
-          <div class="text-center mb-4">
-            <div class="inline-block p-3 bg-gradient-to-r from-purple-500 to-indigo-600 rounded-full mb-2">
-              <i class="fas fa-calculator text-white text-3xl"></i>
-            </div>
-            <h1 class="text-2xl md:text-3xl font-bold text-indigo-700 mb-2">Digitalisasi Perhitungan Biaya dengan <span class="text-purple-600">WiraCalc</span></h1>
-            <p class="text-gray-600 text-base md:text-lg">Inovasi ini mengedepankan penggunaan aplikasi WiraCalc sebagai alat bantu untuk melakukan kalkulasi biaya secara otomatis, transparan, dan akurat, guna meminimalisir kesalahan manual dalam pengelolaan usaha.</p>
+      <form id="form" class="space-y-5">
+        <div class="relative">
+          <label class="block font-semibold mb-2 text-gray-700" for="gambarProduk">
+            <i class="fas fa-image mr-2 text-pink-500"></i>Upload Gambar Produk
+          </label>
+          <input type="file" id="gambarProduk" accept="image/*" class="w-full border-2 border-gray-200 rounded-lg px-4 py-3 focus:outline-none focus:border-pink-500 transition-all duration-300" />
+          <div class="mt-2 text-center">
+            <img id="previewGambar" src="" alt="Preview Gambar" class="mx-auto rounded-lg shadow h-32 object-cover hidden" />
           </div>
-          <div class="flex flex-col gap-3 mt-4">
-            <div class="flex items-center gap-2">
-              <span class="inline-block p-2 bg-purple-100 rounded-full"><i class="fas fa-bolt text-purple-600"></i></span>
-              <span class="font-semibold text-gray-700">Otomatisasi:</span>
-              <span class="text-gray-500">Menghitung modal dan harga jual dalam sekejap.</span>
-            </div>
-            <div class="flex items-center gap-2">
-              <span class="inline-block p-2 bg-indigo-100 rounded-full"><i class="fas fa-eye text-indigo-600"></i></span>
-              <span class="font-semibold text-gray-700">Transparansi:</span>
-              <span class="text-gray-500">Menghasilkan rincian biaya yang jelas dan terbuka.</span>
-            </div>
-            <div class="flex items-center gap-2">
-              <span class="inline-block p-2 bg-yellow-100 rounded-full"><i class="fas fa-check-circle text-yellow-500"></i></span>
-              <span class="font-semibold text-gray-700">Akurasi:</span>
-              <span class="text-gray-500">Menghindari kesalahan hitung manual yang berisiko pada kerugian usaha.</span>
-            </div>
+        </div>
+        <div class="relative">
+          <label class="block font-semibold mb-2 text-gray-700" for="namaProduk">
+            <i class="fas fa-box mr-2 text-purple-500"></i>Nama Produk
+          </label>
+          <input type="text" id="namaProduk" class="w-full border-2 border-gray-200 rounded-lg px-4 py-3 focus:outline-none focus:border-purple-500 transition-all duration-300" placeholder="Contoh: Nasi Goreng" required>
+        </div>
+        <div class="relative">
+          <label class="block font-semibold mb-2 text-gray-700" for="bahanBaku">
+            <i class="fas fa-shopping-basket mr-2 text-green-500"></i>Biaya Bahan Baku
+          </label>
+          <div class="relative">
+            <span class="absolute left-4 top-3.5 text-gray-500 font-medium">Rp</span>
+            <input type="text" id="bahanBaku" class="w-full border-2 border-gray-200 rounded-lg pl-12 pr-4 py-3 focus:outline-none focus:border-purple-500 transition-all duration-300" placeholder="0" required>
           </div>
-        </section>
-        <!-- Kalkulator & Tabel Bahan -->
-        <section class="glass-card p-8 animate-fadeInUp">
-          <div class="text-center mb-8">
-            <div class="inline-block p-3 bg-gradient-to-r from-purple-500 to-indigo-600 rounded-full mb-4">
-              <i class="fas fa-calculator text-white text-3xl"></i>
-            </div>
-            <h2 class="text-2xl font-bold text-indigo-700 mb-2">WiraCalc</h2>
-            <p class="text-gray-500 text-sm">Hitung biaya dan keuntungan dengan mudah & profesional</p>
+        </div>
+        <div class="relative">
+          <label class="block font-semibold mb-2 text-gray-700" for="biayaMasak">
+            <i class="fas fa-fire mr-2 text-red-500"></i>Biaya Masak (Gas/Listrik)
+          </label>
+          <div class="relative">
+            <span class="absolute left-4 top-3.5 text-gray-500 font-medium">Rp</span>
+            <input type="text" id="biayaMasak" class="w-full border-2 border-gray-200 rounded-lg pl-12 pr-4 py-3 focus:outline-none focus:border-purple-500 transition-all duration-300" placeholder="0" required>
           </div>
-          <!-- Mode Kalkulator -->
-          <div class="mb-6 flex gap-2 justify-center">
-            <button class="mode-btn btn-wiracalc" data-mode="fnb"><i class="fas fa-utensils mr-1"></i>Produksi (F&B)</button>
-            <button class="mode-btn btn-wiracalc" data-mode="distributor"><i class="fas fa-truck mr-1"></i>Distributor/Reseller</button>
-            <button class="mode-btn btn-wiracalc" data-mode="jasa"><i class="fas fa-briefcase mr-1"></i>Jasa/Service</button>
+        </div>
+        <div class="relative">
+          <label class="block font-semibold mb-2 text-gray-700" for="margin">
+            <i class="fas fa-percent mr-2 text-yellow-500"></i>Margin Keuntungan
+          </label>
+          <div class="relative">
+            <input type="number" id="margin" class="w-full border-2 border-gray-200 rounded-lg px-4 py-3 focus:outline-none focus:border-purple-500 transition-all duration-300" placeholder="Contoh: 30" min="0" required>
+            <span class="absolute right-4 top-3.5 text-gray-500 font-medium">%</span>
           </div>
-          <!-- Tabel Bahan & Biaya -->
-          <div class="mb-6">
-            <h3 class="font-bold text-gray-700 mb-2">Bahan & Biaya per Batch</h3>
-            <table class="w-full text-sm border rounded-lg overflow-hidden" id="bahanTable">
-              <thead class="bg-indigo-50">
-                <tr>
-                  <th class="p-2">Nama Barang</th>
-                  <th class="p-2">Qty</th>
-                  <th class="p-2">Satuan</th>
-                  <th class="p-2">Harga</th>
-                  <th class="p-2">Subtotal</th>
-                  <th class="p-2">Aksi</th>
-                </tr>
-              </thead>
-              <tbody id="bahanTableBody">
-                <!-- Baris dinamis JS -->
-              </tbody>
-            </table>
-            <button id="addBahanRow" class="mt-2 btn-wiracalc px-4 py-2 rounded-lg"><i class="fas fa-plus"></i> Tambah Bahan</button>
+        </div>
+        <div class="relative">
+          <label class="block font-semibold mb-2 text-gray-700" for="jumlahPorsi">
+            <i class="fas fa-utensils mr-2 text-blue-500"></i>Jumlah Porsi
+          </label>
+          <input type="number" id="jumlahPorsi" class="w-full border-2 border-gray-200 rounded-lg px-4 py-3 focus:outline-none focus:border-purple-500 transition-all duration-300" placeholder="Contoh: 10" min="1" required>
+        </div>
+        <button type="submit" class="w-full bg-gradient-to-r from-purple-500 to-indigo-600 text-white py-3.5 rounded-lg font-semibold hover:from-purple-600 hover:to-indigo-700 transform hover:scale-105 transition-all duration-300 shadow-lg">
+          <i class="fas fa-calculator mr-2"></i>Hitung Sekarang
+        </button>
+        <button type="button" id="resetBtn" title="Reset" class="w-full mt-2 bg-gradient-to-r from-gray-300 to-gray-400 text-gray-700 py-3.5 rounded-lg font-semibold hover:from-gray-400 hover:to-gray-500 transform hover:scale-105 transition-all duration-300 shadow-lg flex items-center justify-center">
+          <i class="fas fa-rotate-right mr-2"></i>Reset
+        </button>
+      </form>
+      <!-- Output Table -->
+      <div id="output" class="mt-8 hidden animate-fadeInUp">
+        <div class="text-center mb-4">
+          <img id="outputGambar" src="" alt="Gambar Produk" class="mx-auto rounded-lg shadow h-32 object-cover mb-2 hidden" />
+          <div class="inline-block p-2 bg-green-100 rounded-full mb-2">
+            <i class="fas fa-check-circle text-green-600 text-2xl"></i>
           </div>
-          <!-- Biaya Operasional & Lain-lain -->
-          <div class="mb-6">
-            <h3 class="font-bold text-gray-700 mb-2">Biaya Operasional & Lain-lain</h3>
-            <input type="number" id="biayaOperasional" class="w-full border-2 border-gray-200 rounded-lg px-4 py-2" placeholder="Biaya Operasional per Batch" />
-            <input type="number" id="biayaLain" class="w-full border-2 border-gray-200 rounded-lg px-4 py-2 mt-2" placeholder="Biaya Lain-lain per Batch" />
-          </div>
-          <!-- Output, Margin & Harga Jual -->
-          <div class="mb-6">
-            <h3 class="font-bold text-gray-700 mb-2">Output, Margin & Harga Jual</h3>
-            <input type="number" id="jumlahPorsi" class="w-full border-2 border-gray-200 rounded-lg px-4 py-2 mb-2" placeholder="Total Porsi per Batch" min="1" />
-            <input type="number" id="hargaJual" class="w-full border-2 border-gray-200 rounded-lg px-4 py-2 mb-2" placeholder="Harga Jual per Porsi (opsional)" min="0" />
-            <button id="hitungBtn" class="w-full btn-wiracalc py-3.5 rounded-lg font-semibold mt-2"><i class="fas fa-calculator mr-2"></i>Hitung HPP & Harga Jual</button>
-          </div>
-          <!-- Output Card -->
-          <div id="output" class="mt-8 hidden animate-fadeInUp">
-            <div class="text-center mb-4">
-              <img id="outputGambar" src="" alt="Gambar Produk" class="mx-auto rounded-lg shadow h-32 object-cover mb-2 hidden" />
-              <div class="inline-block p-2 bg-green-100 rounded-full mb-2">
-                <i class="fas fa-check-circle text-green-600 text-2xl"></i>
+          <h2 class="text-2xl font-bold text-gray-800">Hasil Perhitungan</h2>
+        </div>
+        <div class="bg-gradient-to-br from-purple-50 to-indigo-50 rounded-xl p-6 shadow-inner">
+          <div class="space-y-4">
+            <div class="bg-white rounded-lg p-4 shadow-sm flex items-center justify-between">
+              <div class="flex items-center">
+                <i class="fas fa-tag text-purple-500 text-xl mr-3"></i>
+                <span class="font-semibold text-gray-700">Nama Produk</span>
               </div>
-              <h2 class="text-2xl font-bold text-gray-800">Hasil Perhitungan</h2>
+              <span class="font-bold text-gray-900" id="outNamaProduk"></span>
             </div>
-            <div class="bg-gradient-to-br from-purple-50 to-indigo-50 rounded-xl p-6 shadow-inner">
-              <div class="space-y-4">
-                <div class="bg-white rounded-lg p-4 shadow-sm flex items-center justify-between">
-                  <div class="flex items-center">
-                    <i class="fas fa-tag text-purple-500 text-xl mr-3"></i>
-                    <span class="font-semibold text-gray-700">Nama Produk</span>
-                  </div>
-                  <span class="font-bold text-gray-900" id="outNamaProduk"></span>
-                </div>
-                <div class="bg-white rounded-lg p-4 shadow-sm flex items-center justify-between">
-                  <div class="flex items-center">
-                    <i class="fas fa-wallet text-blue-500 text-xl mr-3"></i>
-                    <span class="font-semibold text-gray-700">Total Modal</span>
-                  </div>
-                  <span class="font-bold text-blue-600 text-lg" id="outTotalModal"></span>
-                </div>
-                <div class="bg-white rounded-lg p-4 shadow-sm flex items-center justify-between">
-                  <div class="flex items-center">
-                    <i class="fas fa-shopping-cart text-green-500 text-xl mr-3"></i>
-                    <span class="font-semibold text-gray-700">Harga Jual/Porsi</span>
-                  </div>
-                  <span class="font-bold text-green-600 text-lg" id="outHargaJual"></span>
-                </div>
-                <div class="bg-gradient-to-r from-yellow-400 to-orange-500 rounded-lg p-4 shadow-md flex items-center justify-between">
-                  <div class="flex items-center">
-                    <i class="fas fa-coins text-white text-xl mr-3"></i>
-                    <span class="font-semibold text-white">Total Keuntungan</span>
-                  </div>
-                  <span class="font-bold text-white text-xl" id="outTotalKeuntungan"></span>
-                </div>
+            <div class="bg-white rounded-lg p-4 shadow-sm flex items-center justify-between">
+              <div class="flex items-center">
+                <i class="fas fa-wallet text-blue-500 text-xl mr-3"></i>
+                <span class="font-semibold text-gray-700">Total Modal</span>
               </div>
+              <span class="font-bold text-blue-600 text-lg" id="outTotalModal"></span>
             </div>
-            <div class="mt-4 flex gap-2 justify-center">
-              <button id="exportPDF" class="bg-gradient-to-r from-pink-500 to-purple-600 text-white px-4 py-2 rounded-lg font-semibold shadow hover:scale-105 transition-all">
-                <i class="fas fa-file-pdf mr-1"></i>Export PDF
-              </button>
-              <button id="exportIMG" class="bg-gradient-to-r from-indigo-500 to-blue-600 text-white px-4 py-2 rounded-lg font-semibold shadow hover:scale-105 transition-all">
-                <i class="fas fa-image mr-1"></i>Export Gambar
-              </button>
-              <button id="exportExcel" class="bg-gradient-to-r from-green-400 to-blue-400 text-white px-4 py-2 rounded-lg font-semibold shadow hover:scale-105 transition-all">
-                <i class="fas fa-file-excel mr-1"></i>Export Excel
-              </button>
+            <div class="bg-white rounded-lg p-4 shadow-sm flex items-center justify-between">
+              <div class="flex items-center">
+                <i class="fas fa-shopping-cart text-green-500 text-xl mr-3"></i>
+                <span class="font-semibold text-gray-700">Harga Jual/Porsi</span>
+              </div>
+              <span class="font-bold text-green-600 text-lg" id="outHargaJual"></span>
+            </div>
+            <div class="bg-gradient-to-r from-yellow-400 to-orange-500 rounded-lg p-4 shadow-md flex items-center justify-between">
+              <div class="flex items-center">
+                <i class="fas fa-coins text-white text-xl mr-3"></i>
+                <span class="font-semibold text-white">Total Keuntungan</span>
+              </div>
+              <span class="font-bold text-white text-xl" id="outTotalKeuntungan"></span>
             </div>
           </div>
-        </section>
+        </div>
+        <div class="mt-4 flex gap-2 justify-center">
+          <button id="exportPDF" class="bg-gradient-to-r from-pink-500 to-purple-600 text-white px-4 py-2 rounded-lg font-semibold shadow hover:scale-105 transition-all">
+            <i class="fas fa-file-pdf mr-1"></i>Export PDF
+          </button>
+          <button id="exportIMG" class="bg-gradient-to-r from-indigo-500 to-blue-600 text-white px-4 py-2 rounded-lg font-semibold shadow hover:scale-105 transition-all">
+            <i class="fas fa-image mr-1"></i>Export Gambar
+          </button>
+        </div>
       </div>
-    </main>
+    </div>
   </div>
   <script src="script.js"></script>
 </body>
