@@ -98,6 +98,23 @@ window.addEventListener('DOMContentLoaded', () => {
 });
 
 // --- Tabel Bahan Baku Dinamis ---
+function updateEmptyState() {
+  const tbody = document.getElementById('bahanTableBody');
+  const emptyRow = document.getElementById('emptyBahanRow');
+  if (tbody.querySelectorAll('tr:not(#emptyBahanRow)').length > 0) {
+    if (emptyRow) emptyRow.remove();
+  } else {
+    if (!emptyRow) {
+      const tr = document.createElement('tr');
+      tr.id = 'emptyBahanRow';
+      tr.innerHTML = `<td colspan="5" class="text-center text-gray-400 py-6">
+        <i class="fas fa-leaf text-2xl mb-2"></i><br>
+        Tambahkan bahan baku untuk memulai perhitungan.
+      </td>`;
+      tbody.appendChild(tr);
+    }
+  }
+}
 function addBahanRow(data = {}) {
   const tbody = document.getElementById('bahanTableBody');
   const tr = document.createElement('tr');
@@ -109,21 +126,26 @@ function addBahanRow(data = {}) {
         <option value="gr" ${data.satuan==='gr'?'selected':''}>gr</option>
         <option value="kg" ${data.satuan==='kg'?'selected':''}>kg</option>
         <option value="ml" ${data.satuan==='ml'?'selected':''}>ml</option>
+        <option value="L" ${data.satuan==='L'?'selected':''}>L</option>
         <option value="pcs" ${data.satuan==='pcs'?'selected':''}>pcs</option>
       </select>
     </td>
     <td><input type="number" class="bahan-harga w-full" value="${data.harga || ''}" min="0" /></td>
-    <td><button class="remove-bahan btn-wiracalc px-2 py-1 rounded"><i class="fas fa-trash"></i></button></td>
+    <td><button type="button" class="remove-bahan btn-wiracalc px-2 py-1 rounded"><i class="fas fa-trash"></i></button></td>
   `;
   tbody.appendChild(tr);
-  tr.querySelector('.remove-bahan').onclick = () => tr.remove();
+  tr.querySelector('.remove-bahan').onclick = () => {
+    tr.remove();
+    updateEmptyState();
+  };
+  updateEmptyState();
 }
 document.getElementById('addBahanRow').onclick = () => addBahanRow();
 
-// --- Kalkulasi dari Tabel Bahan Baku ---
 function getTotalBahanBaku() {
   let total = 0;
   Array.from(document.querySelectorAll('#bahanTableBody tr')).forEach(tr => {
+    if (tr.id === 'emptyBahanRow') return;
     const jumlah = parseFloat(tr.querySelector('.bahan-jumlah').value) || 0;
     const harga = parseFloat(tr.querySelector('.bahan-harga').value) || 0;
     total += jumlah * harga;
@@ -136,14 +158,15 @@ document.getElementById('form').addEventListener('submit', e => {
   e.preventDefault();
   const namaProduk = document.getElementById('namaProduk').value;
   const totalBahanBaku = getTotalBahanBaku();
-  const biayaOperasional = parseFloat(document.getElementById('biayaOperasional').value) || 0;
+  const biayaTenagaKerja = parseFloat(document.getElementById('biayaTenagaKerja').value) || 0;
+  const biayaKemasan = parseFloat(document.getElementById('biayaKemasan').value) || 0;
+  const biayaListrik = parseFloat(document.getElementById('biayaListrik').value) || 0;
   const margin = parseFloat(document.getElementById('margin').value) || 0;
   const jumlahPorsi = parseInt(document.getElementById('jumlahPorsi').value) || 1;
 
   // Validasi input
   let pesan = '';
   if (totalBahanBaku < 100) pesan += 'Total biaya bahan baku terlalu kecil.\n';
-  if (biayaOperasional < 0) pesan += 'Biaya operasional tidak boleh negatif.\n';
   if (margin < 5) pesan += 'Margin keuntungan sebaiknya di atas 5%.\n';
   if (jumlahPorsi < 1) pesan += 'Jumlah porsi minimal 1.\n';
   if (pesan) {
@@ -152,7 +175,8 @@ document.getElementById('form').addEventListener('submit', e => {
   }
 
   // Hitung total modal
-  const totalModal = totalBahanBaku + biayaOperasional;
+  const totalOperasional = biayaTenagaKerja + biayaKemasan + biayaListrik;
+  const totalModal = totalBahanBaku + totalOperasional;
   // Hitung harga jual per porsi
   const hargaJualPerPorsi = (totalModal * (1 + margin / 100)) / jumlahPorsi;
   // Hitung total keuntungan
@@ -186,22 +210,6 @@ function loadScript(src) {
     s.src = src;
     s.onload = resolve;
     document.body.appendChild(s);
-  });
-}
-
-async function exportPDF() {
-  await loadScript('https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js');
-  await loadScript('https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js');
-  const output = document.getElementById('output');
-  html2canvas(output).then(canvas => {
-    const imgData = canvas.toDataURL('image/png');
-    const pdf = new window.jspdf.jsPDF({orientation: 'portrait', unit: 'pt', format: 'a4'});
-    const pageWidth = pdf.internal.pageSize.getWidth();
-    const pageHeight = pdf.internal.pageSize.getHeight();
-    const imgWidth = pageWidth - 40;
-    const imgHeight = canvas.height * imgWidth / canvas.width;
-    pdf.addImage(imgData, 'PNG', 20, 20, imgWidth, imgHeight);
-    pdf.save('hasil-wiracalc.pdf');
   });
 }
 

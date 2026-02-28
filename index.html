@@ -23,15 +23,13 @@
   </script>
   <div class="dashboard-grid max-w-5xl mx-auto p-4">
     <!-- Panel Kiri: Tentang WiraCalc -->
-    <section class="about-card glass-card p-6 mb-6">
-      <div class="text-center mb-4">
-        <div class="inline-block p-3 bg-gradient-to-r from-purple-500 to-indigo-600 rounded-full mb-2">
-          <i class="fas fa-calculator text-white text-3xl"></i>
-        </div>
+    <section class="about-card glass-card p-6 mb-6 flex flex-col justify-center items-center">
+      <div class="w-full text-left mb-4">
+        <div class="inline-block p-3 bg-gradient-to-r from-purple-500 to-indigo-600 rounded-full mb-2 mx-auto"></div>
         <h1 class="text-3xl font-bold text-indigo-700 mb-2">Digitalisasi Perhitungan Biaya dengan <span class="text-purple-600">WiraCalc</span></h1>
         <p class="text-gray-600 text-lg">Inovasi ini mengedepankan penggunaan aplikasi WiraCalc sebagai alat bantu untuk melakukan kalkulasi biaya secara otomatis, transparan, dan akurat, guna meminimalisir kesalahan manual dalam pengelolaan usaha.</p>
       </div>
-      <div class="flex flex-col gap-3 mt-4">
+      <div class="flex flex-col gap-3 mt-4 w-full text-left">
         <div class="flex items-center gap-2">
           <span class="inline-block p-2 bg-purple-100 rounded-full"><i class="fas fa-bolt text-purple-600"></i></span>
           <span class="font-semibold text-gray-700">Otomatisasi:</span>
@@ -90,17 +88,26 @@
               </tr>
             </thead>
             <tbody id="bahanTableBody">
-              <!-- Baris dinamis JS -->
+              <tr id="emptyBahanRow">
+                <td colspan="5" class="text-center text-gray-400 py-6">
+                  <i class="fas fa-leaf text-2xl mb-2"></i><br>
+                  Tambahkan bahan baku untuk memulai perhitungan.
+                </td>
+              </tr>
             </tbody>
           </table>
-          <button id="addBahanRow" type="button" class="mt-2 btn-wiracalc px-4 py-2 rounded-lg"><i class="fas fa-plus"></i> Tambah Bahan</button>
+          <button id="addBahanRow" type="button" class="mt-2 btn-wiracalc px-4 py-2 rounded-lg hover:scale-105 transition-all"><i class="fas fa-plus"></i> Tambah Bahan</button>
         </div>
-        <!-- Input Biaya Operasional -->
+        <!-- Input Biaya Operasional Detail -->
         <div class="relative">
-          <label class="block font-semibold mb-2 text-gray-700" for="biayaOperasional">
-            <i class="fas fa-briefcase mr-2 text-indigo-500"></i>Biaya Operasional (Tenaga Kerja & Kemasan)
+          <label class="block font-semibold mb-2 text-gray-700">
+            <i class="fas fa-briefcase mr-2 text-indigo-500"></i>Biaya Operasional
           </label>
-          <input type="number" id="biayaOperasional" class="w-full border-2 border-gray-200 rounded-lg px-4 py-3 focus:outline-none focus:border-indigo-500 transition-all duration-300" placeholder="Contoh: 50000" min="0" required>
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-2">
+            <input type="number" id="biayaTenagaKerja" class="border-2 border-gray-200 rounded-lg px-4 py-3 focus:outline-none focus:border-indigo-500" placeholder="Tenaga Kerja" min="0" required>
+            <input type="number" id="biayaKemasan" class="border-2 border-gray-200 rounded-lg px-4 py-3 focus:outline-none focus:border-indigo-500" placeholder="Kemasan" min="0" required>
+            <input type="number" id="biayaListrik" class="border-2 border-gray-200 rounded-lg px-4 py-3 focus:outline-none focus:border-indigo-500" placeholder="Listrik/Gas/Lain-lain" min="0" required>
+          </div>
         </div>
         <div class="relative">
           <label class="block font-semibold mb-2 text-gray-700" for="margin">
