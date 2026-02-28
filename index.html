@@ -21,34 +21,44 @@
       });
     }
   </script>
-  <div class="dashboard-grid max-w-5xl mx-auto p-4">
-    <!-- Panel Kiri: Tentang WiraCalc -->
-    <section class="about-card glass-card p-6 mb-6 flex flex-col justify-center items-center">
-      <div class="w-full text-left mb-4">
-        <div class="inline-block p-3 bg-gradient-to-r from-purple-500 to-indigo-600 rounded-full mb-2 mx-auto"></div>
-        <h1 class="text-3xl font-bold text-indigo-700 mb-2">Digitalisasi Perhitungan Biaya dengan <span class="text-purple-600">WiraCalc</span></h1>
-        <p class="text-gray-600 text-lg">Inovasi ini mengedepankan penggunaan aplikasi WiraCalc sebagai alat bantu untuk melakukan kalkulasi biaya secara otomatis, transparan, dan akurat, guna meminimalisir kesalahan manual dalam pengelolaan usaha.</p>
+  <div class="fluid-dashboard flex flex-col gap-8 w-full px-2 md:px-8 py-8">
+    <!-- Deskripsi Fluid Card -->
+    <section class="fluid-card glass-card p-8 mx-auto w-full md:w-11/12 lg:w-10/12 animate-fadeInUp">
+      <div class="mb-6">
+        <div class="flex items-center gap-3 mb-2">
+          <span class="inline-block p-3 bg-gradient-to-r from-purple-500 to-indigo-600 rounded-full">
+            <i class="fas fa-calculator text-white text-3xl"></i>
+          </span>
+          <h1 class="text-3xl font-extrabold text-indigo-700 tracking-tight">Digitalisasi Perhitungan Biaya dengan <span class="text-purple-600">WiraCalc</span></h1>
+        </div>
+        <p class="text-gray-700 text-lg leading-relaxed font-medium">Inovasi ini mengedepankan penggunaan aplikasi WiraCalc sebagai alat bantu untuk melakukan kalkulasi biaya secara otomatis, transparan, dan akurat, guna meminimalisir kesalahan manual dalam pengelolaan usaha.</p>
       </div>
-      <div class="flex flex-col gap-3 mt-4 w-full text-left">
-        <div class="flex items-center gap-2">
-          <span class="inline-block p-2 bg-purple-100 rounded-full"><i class="fas fa-bolt text-purple-600"></i></span>
-          <span class="font-semibold text-gray-700">Otomatisasi:</span>
-          <span class="text-gray-500">Menghitung modal dan harga jual dalam sekejap.</span>
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+        <div class="flex items-center gap-3">
+          <span class="inline-block p-3 bg-purple-100 rounded-full"><i class="fas fa-bolt text-purple-600 text-xl"></i></span>
+          <div>
+            <span class="font-bold text-gray-800">Otomatisasi</span>
+            <p class="text-gray-500 text-sm">Menghitung modal dan harga jual dalam sekejap.</p>
+          </div>
         </div>
-        <div class="flex items-center gap-2">
-          <span class="inline-block p-2 bg-indigo-100 rounded-full"><i class="fas fa-eye text-indigo-600"></i></span>
-          <span class="font-semibold text-gray-700">Transparansi:</span>
-          <span class="text-gray-500">Menghasilkan rincian biaya yang jelas dan terbuka.</span>
+        <div class="flex items-center gap-3">
+          <span class="inline-block p-3 bg-indigo-100 rounded-full"><i class="fas fa-eye text-indigo-600 text-xl"></i></span>
+          <div>
+            <span class="font-bold text-gray-800">Transparansi</span>
+            <p class="text-gray-500 text-sm">Menghasilkan rincian biaya yang jelas dan terbuka.</p>
+          </div>
         </div>
-        <div class="flex items-center gap-2">
-          <span class="inline-block p-2 bg-yellow-100 rounded-full"><i class="fas fa-check-circle text-yellow-500"></i></span>
-          <span class="font-semibold text-gray-700">Akurasi:</span>
-          <span class="text-gray-500">Menghindari kesalahan hitung manual yang berisiko pada kerugian usaha.</span>
+        <div class="flex items-center gap-3">
+          <span class="inline-block p-3 bg-yellow-100 rounded-full"><i class="fas fa-check-circle text-yellow-500 text-xl"></i></span>
+          <div>
+            <span class="font-bold text-gray-800">Akurasi</span>
+            <p class="text-gray-500 text-sm">Menghindari kesalahan hitung manual yang berisiko pada kerugian usaha.</p>
+          </div>
         </div>
       </div>
     </section>
-    <!-- Panel Kanan: Kalkulator -->
-    <section class="calc-card glass-card p-8">
+    <!-- Kalkulator Fluid Card -->
+    <section class="fluid-card glass-card p-8 mx-auto w-full md:w-11/12 lg:w-10/12 animate-fadeInUp">
       <div class="text-center mb-8">
         <div class="inline-block p-3 bg-gradient-to-r from-purple-500 to-indigo-600 rounded-full mb-4">
           <i class="fas fa-calculator text-white text-3xl"></i>
@@ -56,7 +66,7 @@
         <h2 class="text-2xl font-bold text-indigo-700 mb-2">WiraCalc</h2>
         <p class="text-gray-500 text-sm">Hitung biaya dan keuntungan dengan mudah & profesional</p>
       </div>
-      <form id="form" class="space-y-5">
+      <form id="form" class="space-y-6">
         <div class="relative">
           <label class="block font-semibold mb-2 text-gray-700" for="gambarProduk">
             <i class="fas fa-image mr-2 text-pink-500"></i>Upload Gambar Produk
@@ -77,7 +87,7 @@
           <label class="block font-semibold mb-2 text-gray-700">
             <i class="fas fa-shopping-basket mr-2 text-green-500"></i>Bahan Baku
           </label>
-          <table class="w-full text-sm border rounded-lg overflow-hidden" id="bahanTable">
+          <table class="w-full text-sm border rounded-xl overflow-hidden" id="bahanTable">
             <thead class="bg-indigo-50">
               <tr>
                 <th class="p-2">Nama Bahan</th>
@@ -96,18 +106,31 @@
               </tr>
             </tbody>
           </table>
-          <button id="addBahanRow" type="button" class="mt-2 btn-wiracalc px-4 py-2 rounded-lg hover:scale-105 transition-all"><i class="fas fa-plus"></i> Tambah Bahan</button>
+          <button id="addBahanRow" type="button" class="mt-2 btn-wiracalc px-4 py-2 rounded-lg flex items-center gap-2 hover:scale-105 transition-all"><i class="fas fa-plus"></i> Tambah Bahan</button>
         </div>
-        <!-- Input Biaya Operasional Detail -->
+        <!-- Tabel Dinamis Biaya Operasional -->
         <div class="relative">
           <label class="block font-semibold mb-2 text-gray-700">
             <i class="fas fa-briefcase mr-2 text-indigo-500"></i>Biaya Operasional
           </label>
-          <div class="grid grid-cols-1 md:grid-cols-3 gap-2">
-            <input type="number" id="biayaTenagaKerja" class="border-2 border-gray-200 rounded-lg px-4 py-3 focus:outline-none focus:border-indigo-500" placeholder="Tenaga Kerja" min="0" required>
-            <input type="number" id="biayaKemasan" class="border-2 border-gray-200 rounded-lg px-4 py-3 focus:outline-none focus:border-indigo-500" placeholder="Kemasan" min="0" required>
-            <input type="number" id="biayaListrik" class="border-2 border-gray-200 rounded-lg px-4 py-3 focus:outline-none focus:border-indigo-500" placeholder="Listrik/Gas/Lain-lain" min="0" required>
-          </div>
+          <table class="w-full text-sm border rounded-xl overflow-hidden" id="operasionalTable">
+            <thead class="bg-indigo-50">
+              <tr>
+                <th class="p-2">Nama Biaya</th>
+                <th class="p-2">Modal</th>
+                <th class="p-2">Aksi</th>
+              </tr>
+            </thead>
+            <tbody id="operasionalTableBody">
+              <tr id="emptyOperasionalRow">
+                <td colspan="3" class="text-center text-gray-400 py-6">
+                  <i class="fas fa-lightbulb text-2xl mb-2"></i><br>
+                  Tambahkan biaya operasional untuk perhitungan modal.
+                </td>
+              </tr>
+            </tbody>
+          </table>
+          <button id="addOperasionalRow" type="button" class="mt-2 btn-wiracalc px-4 py-2 rounded-lg flex items-center gap-2 hover:scale-105 transition-all"><i class="fas fa-plus"></i> Tambah Biaya Operasional</button>
         </div>
         <div class="relative">
           <label class="block font-semibold mb-2 text-gray-700" for="margin">
@@ -124,11 +147,11 @@
           </label>
           <input type="number" id="jumlahPorsi" class="w-full border-2 border-gray-200 rounded-lg px-4 py-3 focus:outline-none focus:border-purple-500 transition-all duration-300" placeholder="Contoh: 10" min="1" required>
         </div>
-        <button type="submit" class="w-full bg-gradient-to-r from-purple-500 to-indigo-600 text-white py-3.5 rounded-lg font-semibold hover:from-purple-600 hover:to-indigo-700 transform hover:scale-105 transition-all duration-300 shadow-lg">
-          <i class="fas fa-calculator mr-2"></i>Hitung Sekarang
+        <button type="submit" class="w-full bg-gradient-to-r from-purple-500 to-indigo-600 text-white py-3.5 rounded-lg font-semibold flex items-center justify-center gap-2 hover:from-purple-600 hover:to-indigo-700 transform hover:scale-105 transition-all duration-300 shadow-lg">
+          <i class="fas fa-calculator"></i> Hitung Sekarang
         </button>
-        <button type="button" id="resetBtn" title="Reset" class="w-full mt-2 bg-gradient-to-r from-gray-300 to-gray-400 text-gray-700 py-3.5 rounded-lg font-semibold hover:from-gray-400 hover:to-gray-500 transform hover:scale-105 transition-all duration-300 shadow-lg flex items-center justify-center">
-          <i class="fas fa-rotate-right mr-2"></i>Reset
+        <button type="button" id="resetBtn" title="Reset" class="w-full mt-2 bg-gradient-to-r from-gray-300 to-gray-400 text-gray-700 py-3.5 rounded-lg font-semibold flex items-center justify-center gap-2 hover:from-gray-400 hover:to-gray-500 transform hover:scale-105 transition-all duration-300 shadow-lg">
+          <i class="fas fa-rotate-right"></i> Reset
         </button>
       </form>
       <!-- Output Table -->
@@ -173,11 +196,11 @@
           </div>
         </div>
         <div class="mt-4 flex gap-2 justify-center">
-          <button id="exportPDF" class="bg-gradient-to-r from-pink-500 to-purple-600 text-white px-4 py-2 rounded-lg font-semibold shadow hover:scale-105 transition-all">
-            <i class="fas fa-file-pdf mr-1"></i>Export PDF
+          <button id="exportPDF" class="bg-gradient-to-r from-pink-500 to-purple-600 text-white px-4 py-2 rounded-lg font-semibold shadow flex items-center gap-2 hover:scale-105 transition-all">
+            <i class="fas fa-file-pdf"></i> Export PDF
           </button>
-          <button id="exportIMG" class="bg-gradient-to-r from-indigo-500 to-blue-600 text-white px-4 py-2 rounded-lg font-semibold shadow hover:scale-105 transition-all">
-            <i class="fas fa-image mr-1"></i>Export Gambar
+          <button id="exportIMG" class="bg-gradient-to-r from-indigo-500 to-blue-600 text-white px-4 py-2 rounded-lg font-semibold shadow flex items-center gap-2 hover:scale-105 transition-all">
+            <i class="fas fa-image"></i> Export Gambar
           </button>
         </div>
       </div>

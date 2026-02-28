@@ -235,3 +235,234 @@ document.getElementById('output').addEventListener('click', e => {
   if (e.target.closest('#exportPDF')) exportPDF();
   if (e.target.closest('#exportIMG')) exportIMG();
 });
+
+// Helper: FontAwesome icons are used in HTML
+// Fluid logic for dynamic tables and calculation
+
+document.addEventListener('DOMContentLoaded', function() {
+  // --- Bahan Baku Table Logic ---
+  const bahanTableBody = document.getElementById('bahanTableBody');
+  const addBahanRowBtn = document.getElementById('addBahanRow');
+  const satuanOptions = ['gr', 'kg', 'ml', 'L', 'pcs'];
+
+  function updateEmptyBahanState() {
+    if (bahanTableBody.children.length === 0) {
+      bahanTableBody.innerHTML = `<tr id="emptyBahanRow"><td colspan="5" class="text-center text-gray-400 py-6"><i class="fas fa-leaf text-2xl mb-2"></i><br>Tambahkan bahan baku untuk memulai perhitungan.</td></tr>`;
+    } else {
+      const emptyRow = document.getElementById('emptyBahanRow');
+      if (emptyRow) emptyRow.remove();
+    }
+  }
+
+  function addBahanRow() {
+    updateEmptyBahanState();
+    const tr = document.createElement('tr');
+    tr.classList.add('added-row');
+    tr.innerHTML = `
+      <td><input type="text" class="w-full border rounded px-2 py-1" placeholder="Nama Bahan" required></td>
+      <td><input type="number" class="w-full border rounded px-2 py-1" min="0" step="any" placeholder="Jumlah" required></td>
+      <td>
+        <select class="w-full border rounded px-2 py-1">
+          ${satuanOptions.map(opt => `<option value="${opt}">${opt}</option>`).join('')}
+        </select>
+      </td>
+      <td><input type="number" class="w-full border rounded px-2 py-1" min="0" step="any" placeholder="Harga" required></td>
+      <td class="text-center">
+        <button type="button" class="icon-btn remove-bahan" title="Hapus"><i class="fas fa-trash"></i></button>
+      </td>
+    `;
+    bahanTableBody.appendChild(tr);
+    updateEmptyBahanState();
+    tr.querySelector('.remove-bahan').addEventListener('click', function() {
+      tr.classList.add('removed-row');
+      setTimeout(() => {
+        tr.remove();
+        updateEmptyBahanState();
+        updateTotalBahanBaku();
+      }, 350);
+    });
+    // Recalculate on input change
+    Array.from(tr.querySelectorAll('input')).forEach(input => {
+      input.addEventListener('input', updateTotalBahanBaku);
+    });
+    updateTotalBahanBaku();
+  }
+
+  addBahanRowBtn.addEventListener('click', addBahanRow);
+
+  function getTotalBahanBaku() {
+    let total = 0;
+    Array.from(bahanTableBody.children).forEach(tr => {
+      const inputs = tr.querySelectorAll('input');
+      if (inputs.length === 3) {
+        const jumlah = parseFloat(inputs[0].value) || 0;
+        const harga = parseFloat(inputs[2].value) || 0;
+        total += jumlah * harga;
+      }
+    });
+    return total;
+  }
+
+  function updateTotalBahanBaku() {
+    // For output calculation
+  }
+
+  // --- Biaya Operasional Table Logic ---
+  const operasionalTableBody = document.getElementById('operasionalTableBody');
+  const addOperasionalRowBtn = document.getElementById('addOperasionalRow');
+
+  function updateEmptyOperasionalState() {
+    if (operasionalTableBody.children.length === 0) {
+      operasionalTableBody.innerHTML = `<tr id="emptyOperasionalRow"><td colspan="3" class="text-center text-gray-400 py-6"><i class="fas fa-lightbulb text-2xl mb-2"></i><br>Tambahkan biaya operasional untuk perhitungan modal.</td></tr>`;
+    } else {
+      const emptyRow = document.getElementById('emptyOperasionalRow');
+      if (emptyRow) emptyRow.remove();
+    }
+  }
+
+  function addOperasionalRow() {
+    updateEmptyOperasionalState();
+    const tr = document.createElement('tr');
+    tr.classList.add('added-row');
+    tr.innerHTML = `
+      <td><input type="text" class="w-full border rounded px-2 py-1" placeholder="Nama Biaya" required></td>
+      <td><input type="number" class="w-full border rounded px-2 py-1" min="0" step="any" placeholder="Modal" required></td>
+      <td class="text-center">
+        <button type="button" class="icon-btn remove-operasional" title="Hapus"><i class="fas fa-trash"></i></button>
+      </td>
+    `;
+    operasionalTableBody.appendChild(tr);
+    updateEmptyOperasionalState();
+    tr.querySelector('.remove-operasional').addEventListener('click', function() {
+      tr.classList.add('removed-row');
+      setTimeout(() => {
+        tr.remove();
+        updateEmptyOperasionalState();
+        updateTotalOperasional();
+      }, 350);
+    });
+    tr.querySelector('input[type="number"]').addEventListener('input', updateTotalOperasional);
+    updateTotalOperasional();
+  }
+
+  addOperasionalRowBtn.addEventListener('click', addOperasionalRow);
+
+  function getTotalOperasional() {
+    let total = 0;
+    Array.from(operasionalTableBody.children).forEach(tr => {
+      const input = tr.querySelector('input[type="number"]');
+      if (input) {
+        total += parseFloat(input.value) || 0;
+      }
+    });
+    return total;
+  }
+
+  function updateTotalOperasional() {
+    // For output calculation
+  }
+
+  // --- Form Logic & Output ---
+  const form = document.getElementById('form');
+  const output = document.getElementById('output');
+  const outNamaProduk = document.getElementById('outNamaProduk');
+  const outTotalModal = document.getElementById('outTotalModal');
+  const outHargaJual = document.getElementById('outHargaJual');
+  const outTotalKeuntungan = document.getElementById('outTotalKeuntungan');
+  const outGambar = document.getElementById('outputGambar');
+  const previewGambar = document.getElementById('previewGambar');
+  const gambarProduk = document.getElementById('gambarProduk');
+  const resetBtn = document.getElementById('resetBtn');
+
+  gambarProduk.addEventListener('change', function(e) {
+    const file = e.target.files[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = function(ev) {
+        previewGambar.src = ev.target.result;
+        previewGambar.classList.remove('hidden');
+      };
+      reader.readAsDataURL(file);
+    } else {
+      previewGambar.src = '';
+      previewGambar.classList.add('hidden');
+    }
+  });
+
+  form.addEventListener('submit', function(e) {
+    e.preventDefault();
+    // Get values
+    const namaProduk = document.getElementById('namaProduk').value;
+    const margin = parseFloat(document.getElementById('margin').value) || 0;
+    const jumlahPorsi = parseInt(document.getElementById('jumlahPorsi').value) || 1;
+    const totalBahan = getTotalBahanBaku();
+    const totalOperasional = getTotalOperasional();
+    const totalModal = totalBahan + totalOperasional;
+    const hargaJual = Math.ceil((totalModal * (1 + margin/100)) / jumlahPorsi);
+    const totalKeuntungan = Math.ceil((hargaJual * jumlahPorsi) - totalModal);
+    // Output
+    outNamaProduk.textContent = namaProduk;
+    outTotalModal.textContent = 'Rp ' + totalModal.toLocaleString('id-ID');
+    outHargaJual.textContent = 'Rp ' + hargaJual.toLocaleString('id-ID');
+    outTotalKeuntungan.textContent = 'Rp ' + totalKeuntungan.toLocaleString('id-ID');
+    // Gambar
+    if (previewGambar.src && !previewGambar.classList.contains('hidden')) {
+      outGambar.src = previewGambar.src;
+      outGambar.classList.remove('hidden');
+    } else {
+      outGambar.src = '';
+      outGambar.classList.add('hidden');
+    }
+    output.classList.remove('hidden');
+    window.scrollTo({ top: output.offsetTop - 40, behavior: 'smooth' });
+  });
+
+  resetBtn.addEventListener('click', function() {
+    form.reset();
+    previewGambar.src = '';
+    previewGambar.classList.add('hidden');
+    outGambar.src = '';
+    outGambar.classList.add('hidden');
+    output.classList.add('hidden');
+    // Remove all table rows
+    bahanTableBody.innerHTML = '';
+    operasionalTableBody.innerHTML = '';
+    updateEmptyBahanState();
+    updateEmptyOperasionalState();
+  });
+
+  // --- Export Logic ---
+  document.getElementById('exportIMG').addEventListener('click', function() {
+    const exportTarget = output;
+    // html2canvas with white background
+    html2canvas(exportTarget, {
+      backgroundColor: '#fff',
+      scale: 2,
+      useCORS: true
+    }).then(canvas => {
+      const link = document.createElement('a');
+      link.download = 'wiracalc-hasil.png';
+      link.href = canvas.toDataURL('image/png');
+      link.click();
+    });
+  });
+  document.getElementById('exportPDF').addEventListener('click', function() {
+    const exportTarget = output;
+    html2canvas(exportTarget, {
+      backgroundColor: '#fff',
+      scale: 2,
+      useCORS: true
+    }).then(canvas => {
+      const imgData = canvas.toDataURL('image/png');
+      const pdf = new jsPDF({ orientation: 'portrait', unit: 'px', format: 'a4' });
+      const pageWidth = pdf.internal.pageSize.getWidth();
+      const pageHeight = pdf.internal.pageSize.getHeight();
+      pdf.addImage(imgData, 'PNG', 0, 0, pageWidth, pageHeight);
+      pdf.save('wiracalc-hasil.pdf');
+    });
+  });
+
+  // --- Initial State ---
+  updateEmptyBahanState();
+  updateEmptyOperasionalState();
+});
