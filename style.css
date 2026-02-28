@@ -98,3 +98,83 @@ button, input[type="file"] {
   max-width: 400px;
   margin: 0 auto;
 }
+
+/* Dashboard Section */
+.dashboard-container {
+  min-height: 100vh;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+}
+.sidebar {
+  min-height: 100vh;
+  border-right: 1px solid #e5e7eb;
+  box-shadow: 0 2px 16px rgba(76, 81, 255, 0.08);
+}
+.main-content {
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+@media (max-width: 900px) {
+  .dashboard-container {
+    flex-direction: column;
+  }
+  .sidebar {
+    min-height: auto;
+    border-right: none;
+    border-bottom: 1px solid #e5e7eb;
+  }
+}
+
+/* Tabel Bahan Interaktif */
+table#bahanTable {
+  border-collapse: separate;
+  border-spacing: 0;
+  background: rgba(255,255,255,0.85);
+  box-shadow: 0 2px 8px rgba(76, 81, 255, 0.05);
+}
+table#bahanTable th, table#bahanTable td {
+  border-bottom: 1px solid #e5e7eb;
+  padding: 0.5rem 0.75rem;
+}
+table#bahanTable th {
+  font-weight: 600;
+  color: #4f46e5;
+  background: #eef2ff;
+}
+table#bahanTable td {
+  background: #fff;
+}
+
+/* Tombol mode kalkulator */
+.mode-btn {
+  font-size: 0.95rem;
+  padding: 0.5rem 1.2rem;
+  border-radius: 0.75rem;
+  margin-right: 0.5rem;
+  margin-bottom: 0.5rem;
+  box-shadow: 0 2px 8px rgba(76, 81, 255, 0.08);
+}
+.mode-btn.active {
+  background: linear-gradient(90deg, #7c3aed 0%, #6366f1 100%);
+  color: #fff;
+}
+
+/* Export buttons */
+#exportExcel {
+  background: linear-gradient(90deg, #34d399 0%, #60a5fa 100%);
+}
+#exportExcel:hover {
+  background: linear-gradient(90deg, #059669 0%, #2563eb 100%);
+}
+
+/* Produk tersimpan */
+#savedProducts li {
+  padding: 0.3rem 0.5rem;
+  border-radius: 0.5rem;
+  background: #f3f4f6;
+  margin-bottom: 0.3rem;
+  cursor: pointer;
+}
+#savedProducts li:hover {
+  background: #e0e7ff;
+}
