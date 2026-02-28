@@ -18,3 +18,46 @@ button, input[type="file"] {
   font-size: 1.1rem;
   min-height: 48px;
 }
+
+/* Hero/Introduction Section */
+.hero-title {
+  font-size: 2rem;
+  font-weight: 700;
+  color: #4f46e5; /* indigo-700 */
+}
+.hero-desc {
+  font-size: 1.1rem;
+  color: #374151; /* gray-600 */
+}
+.hero-icon {
+  font-size: 2.2rem;
+  color: #a78bfa; /* purple-400 */
+}
+.hero-point {
+  font-size: 1rem;
+  color: #4b5563; /* gray-700 */
+}
+
+/* Heading & Branding */
+.heading-wiracalc {
+  color: #4f46e5; /* indigo-700 */
+  font-weight: 700;
+}
+.heading-sub {
+  color: #a78bfa; /* purple-400 */
+}
+
+/* Button & Accent Colors */
+.btn-wiracalc {
+  background: linear-gradient(90deg, #7c3aed 0%, #6366f1 100%);
+  color: #fff;
+  font-weight: 600;
+}
+.btn-wiracalc:hover {
+  background: linear-gradient(90deg, #6d28d9 0%, #4338ca 100%);
+}
+
+/* Output Table Accent */
+.output-accent {
+  background: linear-gradient(90deg, #ede9fe 0%, #e0e7ff 100%);
+}
