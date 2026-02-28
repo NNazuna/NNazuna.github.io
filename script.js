@@ -268,18 +268,35 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   }
 
-  // --- Export & Share Event Listeners ---
-  document.getElementById('exportIMG').addEventListener('click', function() {
-    html2canvas(output, { backgroundColor: '#fff', scale: 2, useCORS: true }).then(canvas => {
+  // --- Export Gambar ---
+  function exportIMG() {
+    // Pastikan laporan-digital tidak hidden
+    const laporan = document.getElementById('laporan-digital');
+    const prevDisplay = laporan.style.display;
+    laporan.style.display = '';
+    html2canvas(laporan, {
+      backgroundColor: '#fff',
+      scale: 2,
+      useCORS: true
+    }).then(canvas => {
       const link = document.createElement('a');
       link.download = `WiraCalc-${outNamaProduk.textContent}.png`;
       link.href = canvas.toDataURL('image/png');
       link.click();
+      laporan.style.display = prevDisplay;
     });
-  });
+  }
 
-  document.getElementById('exportPDF').addEventListener('click', function() {
-    html2canvas(output, { backgroundColor: '#fff', scale: 2, useCORS: true }).then(canvas => {
+  // --- Export PDF ---
+  function exportPDF() {
+    const laporan = document.getElementById('laporan-digital');
+    const prevDisplay = laporan.style.display;
+    laporan.style.display = '';
+    html2canvas(laporan, {
+      backgroundColor: '#fff',
+      scale: 2,
+      useCORS: true
+    }).then(canvas => {
       const imgData = canvas.toDataURL('image/png');
       const { jsPDF } = window.jspdf;
       const pdf = new jsPDF('p', 'mm', 'a4');
@@ -288,12 +305,41 @@ document.addEventListener('DOMContentLoaded', () => {
       const pdfHeight = (imgProps.height * pdfWidth) / imgProps.width;
       pdf.addImage(imgData, 'PNG', 0, 0, pdfWidth, pdfHeight);
       pdf.save(`Laporan-${outNamaProduk.textContent}.pdf`);
+      laporan.style.display = prevDisplay;
     });
-  });
+  }
 
-  // Share button event
+  // --- Web Share API ---
+  async function shareKeSosmed() {
+    const laporan = document.getElementById('laporan-digital');
+    const prevDisplay = laporan.style.display;
+    laporan.style.display = '';
+    try {
+      const canvas = await html2canvas(laporan, { backgroundColor: '#fff', scale: 2, useCORS: true });
+      canvas.toBlob(async (blob) => {
+        const file = new File([blob], `Laporan-WiraCalc.png`, { type: 'image/png' });
+        if (navigator.share && navigator.canShare && navigator.canShare({ files: [file] })) {
+          await navigator.share({
+            title: 'Laporan WiraCalc',
+            text: `Hasil perhitungan biaya produksi untuk ${outNamaProduk.textContent}`,
+            files: [file],
+          });
+        } else {
+          alert('Fitur Share tidak didukung di browser ini. Silakan gunakan tombol Export.');
+        }
+        laporan.style.display = prevDisplay;
+      });
+    } catch (err) {
+      laporan.style.display = prevDisplay;
+      console.error('Share gagal:', err);
+    }
+  }
+
+  // --- Export & Share Event Listeners ---
+  document.getElementById('exportIMG').addEventListener('click', exportIMG);
+  document.getElementById('exportPDF').addEventListener('click', exportPDF);
   const shareBtn = document.getElementById('shareBtn');
-  if (shareBtn) shareBtn.addEventListener('click', shareHasil);
+  if (shareBtn) shareBtn.addEventListener('click', shareKeSosmed);
 
   // --- Initial State ---
   loadFromLocalStorage();
