@@ -8,34 +8,47 @@
   <script src="https://cdn.tailwindcss.com"></script>
   <!-- Font Awesome for Icons -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-  <style>
-    @keyframes fadeInUp {
-      from {
-        opacity: 0;
-        transform: translateY(20px);
-      }
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
-    }
-    .animate-fadeInUp {
-      animation: fadeInUp 0.6s ease-out;
-    }
-    .gradient-bg {
-      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-    }
-  </style>
+  <link rel="stylesheet" href="style.css">
+  <link rel="manifest" href="manifest.json">
 </head>
 <body class="min-h-screen flex items-center justify-center p-4 gradient-bg">
-  <div class="bg-white p-8 rounded-2xl shadow-2xl w-full max-w-md animate-fadeInUp">
-    <div class="text-center mb-8">
-      <div class="inline-block p-3 bg-gradient-to-r from-purple-500 to-indigo-600 rounded-full mb-4">
-        <i class="fas fa-calculator text-white text-3xl"></i>
+  <div class="w-full max-w-md">
+    <!-- Hero/Introduction -->
+    <section class="bg-white rounded-2xl shadow-2xl p-6 mb-6 animate-fadeInUp">
+      <div class="text-center mb-4">
+        <div class="inline-block p-3 bg-gradient-to-r from-purple-500 to-indigo-600 rounded-full mb-2">
+          <i class="fas fa-calculator text-white text-3xl"></i>
+        </div>
+        <h1 class="text-2xl md:text-3xl font-bold text-indigo-700 mb-2">Digitalisasi Perhitungan Biaya dengan <span class="text-purple-600">WiraCalc</span></h1>
+        <p class="text-gray-600 text-base md:text-lg">Inovasi ini mengedepankan penggunaan aplikasi WiraCalc sebagai alat bantu untuk melakukan kalkulasi biaya secara otomatis, transparan, dan akurat, guna meminimalisir kesalahan manual dalam pengelolaan usaha.</p>
       </div>
-      <h1 class="text-3xl font-bold text-gray-800 mb-2">Wiratama</h1>
-      <p class="text-gray-500 text-sm">Hitung biaya dan keuntungan dengan mudah</p>
-    </div>
+      <div class="flex flex-col gap-3 mt-4">
+        <div class="flex items-center gap-2">
+          <span class="inline-block p-2 bg-purple-100 rounded-full"><i class="fas fa-bolt text-purple-600"></i></span>
+          <span class="font-semibold text-gray-700">Otomatisasi:</span>
+          <span class="text-gray-500">Menghitung modal dan harga jual dalam sekejap.</span>
+        </div>
+        <div class="flex items-center gap-2">
+          <span class="inline-block p-2 bg-indigo-100 rounded-full"><i class="fas fa-eye text-indigo-600"></i></span>
+          <span class="font-semibold text-gray-700">Transparansi:</span>
+          <span class="text-gray-500">Menghasilkan rincian biaya yang jelas dan terbuka.</span>
+        </div>
+        <div class="flex items-center gap-2">
+          <span class="inline-block p-2 bg-yellow-100 rounded-full"><i class="fas fa-check-circle text-yellow-500"></i></span>
+          <span class="font-semibold text-gray-700">Akurasi:</span>
+          <span class="text-gray-500">Menghindari kesalahan hitung manual yang berisiko pada kerugian usaha.</span>
+        </div>
+      </div>
+    </section>
+    <!-- Kalkulator Box -->
+    <div class="bg-white p-8 rounded-2xl shadow-2xl animate-fadeInUp">
+      <div class="text-center mb-8">
+        <div class="inline-block p-3 bg-gradient-to-r from-purple-500 to-indigo-600 rounded-full mb-4">
+          <i class="fas fa-calculator text-white text-3xl"></i>
+        </div>
+        <h2 class="text-2xl font-bold text-indigo-700 mb-2">WiraCalc</h2>
+        <p class="text-gray-500 text-sm">Hitung biaya dan keuntungan dengan mudah & profesional</p>
+      </div>
     <!-- Form Input -->
     <form id="form" class="space-y-5">
         <div class="relative">
@@ -148,105 +161,6 @@
       </div>
     </div>
   </div>
-  <script>
-    // Fungsi untuk memformat angka ke Rupiah
-    function formatRupiah(angka) {
-      return 'Rp ' + angka.toLocaleString('id-ID');
-    }
-
-      // Fungsi untuk format ribuan live pada input
-      function formatInputRupiah(input) {
-        let value = input.value.replace(/[^0-9]/g, '');
-        if (value === '') {
-          input.value = '';
-          input.setAttribute('data-value', '');
-          return;
-        }
-        input.value = parseInt(value, 10).toLocaleString('id-ID');
-        input.setAttribute('data-value', value);
-      }
-
-      // Event listener untuk input bahan baku dan biaya masak
-      document.getElementById('bahanBaku').addEventListener('input', function(e) {
-        formatInputRupiah(e.target);
-        simpanSementara();
-      });
-      document.getElementById('biayaMasak').addEventListener('input', function(e) {
-        formatInputRupiah(e.target);
-        simpanSementara();
-      });
-
-      // Preview gambar produk
-      document.getElementById('gambarProduk').addEventListener('change', function(e) {
-        const file = e.target.files[0];
-        if (file) {
-          const reader = new FileReader();
-          reader.onload = function(ev) {
-            document.getElementById('previewGambar').src = ev.target.result;
-            document.getElementById('previewGambar').classList.remove('hidden');
-          };
-          reader.readAsDataURL(file);
-        } else {
-          document.getElementById('previewGambar').src = '';
-          document.getElementById('previewGambar').classList.add('hidden');
-        }
-      });
-
-
-
-      // Fungsi untuk reset form dan hasil
-      function resetForm() {
-        document.getElementById('form').reset();
-        document.getElementById('output').classList.add('hidden');
-        document.getElementById('outNamaProduk').textContent = '';
-        document.getElementById('outTotalModal').textContent = '';
-        document.getElementById('outHargaJual').textContent = '';
-        document.getElementById('outTotalKeuntungan').textContent = '';
-          document.getElementById('previewGambar').src = '';
-          document.getElementById('previewGambar').classList.add('hidden');
-          document.getElementById('outputGambar').src = '';
-          document.getElementById('outputGambar').classList.add('hidden');
-      }
-
-    // Event listener untuk form submit
-    document.getElementById('form').addEventListener('submit', function(e) {
-      e.preventDefault();
-      // Ambil nilai input
-        const namaProduk = document.getElementById('namaProduk').value;
-        const bahanBaku = parseFloat(document.getElementById('bahanBaku').getAttribute('data-value') || '0');
-        const biayaMasak = parseFloat(document.getElementById('biayaMasak').getAttribute('data-value') || '0');
-        const margin = parseFloat(document.getElementById('margin').value) || 0;
-        const jumlahPorsi = parseInt(document.getElementById('jumlahPorsi').value) || 1;
-
-      // Hitung total modal
-      const totalModal = bahanBaku + biayaMasak;
-      // Hitung harga jual per porsi
-      const hargaJualPerPorsi = (totalModal * (1 + margin / 100)) / jumlahPorsi;
-      // Hitung total keuntungan
-      const totalKeuntungan = (hargaJualPerPorsi * jumlahPorsi) - totalModal;
-
-      // Tampilkan hasil ke tabel
-      document.getElementById('outNamaProduk').textContent = namaProduk;
-      document.getElementById('outTotalModal').textContent = formatRupiah(totalModal);
-      document.getElementById('outHargaJual').textContent = formatRupiah(hargaJualPerPorsi.toFixed(0));
-      document.getElementById('outTotalKeuntungan').textContent = formatRupiah(totalKeuntungan.toFixed(0));
-      document.getElementById('output').classList.remove('hidden');
-        // Tampilkan gambar di hasil
-        const gambarSrc = document.getElementById('previewGambar').src;
-        if (gambarSrc) {
-          document.getElementById('outputGambar').src = gambarSrc;
-          document.getElementById('outputGambar').classList.remove('hidden');
-        } else {
-          document.getElementById('outputGambar').src = '';
-          document.getElementById('outputGambar').classList.add('hidden');
-        }
-    });
-
-      // Event listener untuk tombol reset
-      document.getElementById('resetBtn').addEventListener('click', resetForm);
-
-      // Simpan setiap perubahan input
-
-  </script>
+  <script src="script.js"></script>
 </body>
 </html>
