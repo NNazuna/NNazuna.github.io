@@ -17,7 +17,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const addOperasionalRowBtn = document.getElementById('addOperasionalRow');
   const satuanOptions = ['gr', 'kg', 'ml', 'L', 'pcs'];
   const form = document.getElementById('form');
-  const output = document.getElementById('output');
+  const output = document.getElementById('laporan-digital');
   const outNamaProduk = document.getElementById('outNamaProduk');
   const outTotalModal = document.getElementById('outTotalModal');
   const outHargaJual = document.getElementById('outHargaJual');
@@ -27,7 +27,6 @@ document.addEventListener('DOMContentLoaded', () => {
   const gambarProduk = document.getElementById('gambarProduk');
   const resetBtn = document.getElementById('resetBtn');
   // Export wrapper
-  const laporanDigital = document.getElementById('laporan-digital');
   const exportBahanTableBody = document.getElementById('exportBahanTableBody');
   const exportOperasionalTableBody = document.getElementById('exportOperasionalTableBody');
   const exportMargin = document.getElementById('exportMargin');
@@ -324,7 +323,7 @@ document.addEventListener('DOMContentLoaded', () => {
   // --- Export Logic ---
   document.getElementById('exportIMG').addEventListener('click', function() {
     syncExportTables();
-    html2canvas(laporanDigital, {
+    html2canvas(output, {
       backgroundColor: '#fff',
       scale: 2,
       useCORS: true
@@ -337,7 +336,7 @@ document.addEventListener('DOMContentLoaded', () => {
   });
   document.getElementById('exportPDF').addEventListener('click', function() {
     syncExportTables();
-    html2canvas(laporanDigital, {
+    html2canvas(output, {
       backgroundColor: '#fff',
       scale: 2,
       useCORS: true
@@ -353,4 +352,5 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // --- Initial State ---
   loadFromLocalStorage();
+  output.classList.add('hidden');
 });

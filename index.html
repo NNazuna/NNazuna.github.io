@@ -87,25 +87,27 @@
           <label class="block font-semibold mb-2 text-gray-700">
             <i class="fas fa-shopping-basket mr-2 text-green-500"></i>Bahan Baku
           </label>
-          <table class="w-full text-sm border rounded-xl overflow-hidden" id="bahanTable">
-            <thead class="bg-indigo-50">
-              <tr>
-                <th class="p-2">Nama Bahan</th>
-                <th class="p-2">Jumlah</th>
-                <th class="p-2">Satuan</th>
-                <th class="p-2">Harga</th>
-                <th class="p-2">Aksi</th>
-              </tr>
-            </thead>
-            <tbody id="bahanTableBody">
-              <tr id="emptyBahanRow">
-                <td colspan="5" class="text-center text-gray-400 py-6">
-                  <i class="fas fa-leaf text-2xl mb-2"></i><br>
-                  Tambahkan bahan baku untuk memulai perhitungan.
-                </td>
-              </tr>
-            </tbody>
-          </table>
+          <div class="overflow-x-auto">
+            <table class="w-full text-sm border rounded-xl overflow-hidden" id="bahanTable">
+              <thead class="bg-indigo-50">
+                <tr>
+                  <th class="p-2">Nama Bahan</th>
+                  <th class="p-2">Jumlah</th>
+                  <th class="p-2">Satuan</th>
+                  <th class="p-2">Harga</th>
+                  <th class="p-2">Aksi</th>
+                </tr>
+              </thead>
+              <tbody id="bahanTableBody">
+                <tr id="emptyBahanRow">
+                  <td colspan="5" class="text-center text-gray-400 py-6">
+                    <i class="fas fa-leaf text-2xl mb-2"></i><br>
+                    Tambahkan bahan baku untuk memulai perhitungan.
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
           <button id="addBahanRow" type="button" class="mt-2 btn-wiracalc px-4 py-2 rounded-lg flex items-center gap-2 hover:scale-105 transition-all"><i class="fas fa-plus"></i> Tambah Bahan</button>
         </div>
         <!-- Tabel Dinamis Biaya Operasional -->
@@ -113,23 +115,25 @@
           <label class="block font-semibold mb-2 text-gray-700">
             <i class="fas fa-briefcase mr-2 text-indigo-500"></i>Biaya Operasional
           </label>
-          <table class="w-full text-sm border rounded-xl overflow-hidden" id="operasionalTable">
-            <thead class="bg-indigo-50">
-              <tr>
-                <th class="p-2">Nama Biaya</th>
-                <th class="p-2">Modal</th>
-                <th class="p-2">Aksi</th>
-              </tr>
-            </thead>
-            <tbody id="operasionalTableBody">
-              <tr id="emptyOperasionalRow">
-                <td colspan="3" class="text-center text-gray-400 py-6">
-                  <i class="fas fa-lightbulb text-2xl mb-2"></i><br>
-                  Tambahkan biaya operasional untuk perhitungan modal.
-                </td>
-              </tr>
-            </tbody>
-          </table>
+          <div class="overflow-x-auto">
+            <table class="w-full text-sm border rounded-xl overflow-hidden" id="operasionalTable">
+              <thead class="bg-indigo-50">
+                <tr>
+                  <th class="p-2">Nama Biaya</th>
+                  <th class="p-2">Modal</th>
+                  <th class="p-2">Aksi</th>
+                </tr>
+              </thead>
+              <tbody id="operasionalTableBody">
+                <tr id="emptyOperasionalRow">
+                  <td colspan="3" class="text-center text-gray-400 py-6">
+                    <i class="fas fa-lightbulb text-2xl mb-2"></i><br>
+                    Tambahkan biaya operasional untuk perhitungan modal.
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
           <button id="addOperasionalRow" type="button" class="mt-2 btn-wiracalc px-4 py-2 rounded-lg flex items-center gap-2 hover:scale-105 transition-all"><i class="fas fa-plus"></i> Tambah Biaya Operasional</button>
         </div>
         <div class="relative">
@@ -155,7 +159,7 @@
         </button>
       </form>
       <!-- Laporan Digital (Export Wrapper) -->
-      <div id="laporan-digital" class="mt-8 bg-white rounded-xl p-6 shadow-inner">
+      <div id="laporan-digital" class="mt-8 bg-white rounded-xl p-6 shadow-inner hidden">
         <div class="text-center mb-4">
           <img id="outputGambar" src="" alt="Gambar Produk" class="mx-auto rounded-lg shadow h-32 object-cover mb-2 hidden" />
           <div class="inline-block p-2 bg-green-100 rounded-full mb-2">
@@ -194,7 +198,7 @@
           </div>
         </div>
         <!-- Rincian Tabel Bahan Baku -->
-        <div class="mt-6">
+        <div class="mt-6 overflow-x-auto">
           <h3 class="text-lg font-bold text-purple-700 mb-2">Rincian Bahan Baku</h3>
           <table class="w-full text-sm border rounded-xl overflow-hidden" id="exportBahanTable">
             <thead class="bg-indigo-50">
@@ -209,7 +213,7 @@
           </table>
         </div>
         <!-- Rincian Tabel Biaya Operasional -->
-        <div class="mt-6">
+        <div class="mt-6 overflow-x-auto">
           <h3 class="text-lg font-bold text-indigo-700 mb-2">Rincian Biaya Operasional</h3>
           <table class="w-full text-sm border rounded-xl overflow-hidden" id="exportOperasionalTable">
             <thead class="bg-indigo-50">
