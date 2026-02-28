@@ -182,7 +182,16 @@ async function exportPDF() {
 async function exportIMG() {
   await loadScript('https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js');
   const output = document.getElementById('output');
-  html2canvas(output).then(canvas => {
+  // Tambahkan styling khusus untuk export agar background solid dan tampilan rapi
+  output.classList.add('export-report');
+  // Tunggu reflow agar style diterapkan
+  await new Promise(r => setTimeout(r, 100));
+  html2canvas(output, {
+    backgroundColor: '#fff',
+    useCORS: true,
+    scale: 2
+  }).then(canvas => {
+    output.classList.remove('export-report');
     const link = document.createElement('a');
     link.download = 'hasil-wiracalc.png';
     link.href = canvas.toDataURL('image/png');

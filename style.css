@@ -2,6 +2,8 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap');
 body {
   font-family: 'Inter', Arial, sans-serif;
+  max-width: 100vw;
+  overflow-x: hidden;
 }
 .gradient-bg {
   background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
@@ -60,4 +62,39 @@ button, input[type="file"] {
 /* Output Table Accent */
 .output-accent {
   background: linear-gradient(90deg, #ede9fe 0%, #e0e7ff 100%);
+}
+
+/* Responsive Grid Layout */
+.main-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 2rem;
+  max-width: 900px;
+  margin: 0 auto;
+}
+@media (min-width: 900px) {
+  .main-grid {
+    grid-template-columns: 1fr 1fr;
+    align-items: start;
+  }
+}
+
+/* Glassmorphism Card Effect */
+.glass-card {
+  background: rgba(255,255,255,0.7);
+  box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.15);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border-radius: 1.5rem;
+  border: 1px solid rgba(255,255,255,0.18);
+}
+
+/* Exported Image Styling */
+.export-report {
+  background: #fff !important;
+  border-radius: 1.2rem !important;
+  padding: 2rem !important;
+  box-shadow: 0 4px 24px rgba(76, 81, 255, 0.08);
+  max-width: 400px;
+  margin: 0 auto;
 }
