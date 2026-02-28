@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Kalkulator Biaya Produksi</title>
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Font Awesome for Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    @keyframes fadeInUp {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+    .animate-fadeInUp {
+      animation: fadeInUp 0.6s ease-out;
+    }
+    .gradient-bg {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    }
+  </style>
+</head>
+<body class="min-h-screen flex items-center justify-center p-4 gradient-bg">
+  <div class="bg-white p-8 rounded-2xl shadow-2xl w-full max-w-md animate-fadeInUp">
+    <div class="text-center mb-8">
+      <div class="inline-block p-3 bg-gradient-to-r from-purple-500 to-indigo-600 rounded-full mb-4">
+        <i class="fas fa-calculator text-white text-3xl"></i>
+      </div>
+      <h1 class="text-3xl font-bold text-gray-800 mb-2">Wiratama</h1>
+      <p class="text-gray-500 text-sm">Hitung biaya dan keuntungan dengan mudah</p>
+    </div>
+    <!-- Form Input -->
+    <form id="form" class="space-y-5">
+        <div class="relative">
+          <label class="block font-semibold mb-2 text-gray-700" for="gambarProduk">
+            <i class="fas fa-image mr-2 text-pink-500"></i>Upload Gambar Produk
+          </label>
+          <input type="file" id="gambarProduk" accept="image/*" class="w-full border-2 border-gray-200 rounded-lg px-4 py-3 focus:outline-none focus:border-pink-500 transition-all duration-300" />
+          <div class="mt-2 text-center">
+            <img id="previewGambar" src="" alt="Preview Gambar" class="mx-auto rounded-lg shadow h-32 object-cover hidden" />
+          </div>
+        </div>
+      <div class="relative">
+        <label class="block font-semibold mb-2 text-gray-700" for="namaProduk">
+          <i class="fas fa-box mr-2 text-purple-500"></i>Nama Produk
+        </label>
+        <input type="text" id="namaProduk" 
+          class="w-full border-2 border-gray-200 rounded-lg px-4 py-3 focus:outline-none focus:border-purple-500 transition-all duration-300" 
+          placeholder="Contoh: Nasi Goreng" required>
+      </div>
+      <div class="relative">
+        <label class="block font-semibold mb-2 text-gray-700" for="bahanBaku">
+          <i class="fas fa-shopping-basket mr-2 text-green-500"></i>Biaya Bahan Baku
+        </label>
+        <div class="relative">
+          <span class="absolute left-4 top-3.5 text-gray-500 font-medium">Rp</span>
+          <input type="text" id="bahanBaku" 
+            class="w-full border-2 border-gray-200 rounded-lg pl-12 pr-4 py-3 focus:outline-none focus:border-purple-500 transition-all duration-300" 
+            placeholder="0" required>
+        </div>
+      </div>
+      <div class="relative">
+        <label class="block font-semibold mb-2 text-gray-700" for="biayaMasak">
+          <i class="fas fa-fire mr-2 text-red-500"></i>Biaya Masak (Gas/Listrik)
+        </label>
+        <div class="relative">
+          <span class="absolute left-4 top-3.5 text-gray-500 font-medium">Rp</span>
+          <input type="text" id="biayaMasak" 
+            class="w-full border-2 border-gray-200 rounded-lg pl-12 pr-4 py-3 focus:outline-none focus:border-purple-500 transition-all duration-300" 
+            placeholder="0" required>
+        </div>
+      </div>
+      <div class="relative">
+        <label class="block font-semibold mb-2 text-gray-700" for="margin">
+          <i class="fas fa-percent mr-2 text-yellow-500"></i>Margin Keuntungan
+        </label>
+        <div class="relative">
+          <input type="number" id="margin" 
+            class="w-full border-2 border-gray-200 rounded-lg px-4 py-3 focus:outline-none focus:border-purple-500 transition-all duration-300" 
+            placeholder="Contoh: 30" min="0" required>
+          <span class="absolute right-4 top-3.5 text-gray-500 font-medium">%</span>
+        </div>
+      </div>
+      <div class="relative">
+        <label class="block font-semibold mb-2 text-gray-700" for="jumlahPorsi">
+          <i class="fas fa-utensils mr-2 text-blue-500"></i>Jumlah Porsi
+        </label>
+        <input type="number" id="jumlahPorsi" 
+          class="w-full border-2 border-gray-200 rounded-lg px-4 py-3 focus:outline-none focus:border-purple-500 transition-all duration-300" 
+          placeholder="Contoh: 10" min="1" required>
+      </div>
+      <button type="submit" 
+        class="w-full bg-gradient-to-r from-purple-500 to-indigo-600 text-white py-3.5 rounded-lg font-semibold hover:from-purple-600 hover:to-indigo-700 transform hover:scale-105 transition-all duration-300 shadow-lg">
+        <i class="fas fa-calculator mr-2"></i>Hitung Sekarang
+      </button>
+        <button type="button" id="resetBtn" title="Reset" class="w-full mt-2 bg-gradient-to-r from-gray-300 to-gray-400 text-gray-700 py-3.5 rounded-lg font-semibold hover:from-gray-400 hover:to-gray-500 transform hover:scale-105 transition-all duration-300 shadow-lg flex items-center justify-center">
+          <i class="fas fa-rotate-right mr-2"></i>Reset
+        </button>
+    </form>
+    <!-- Output Table -->
+    <div id="output" class="mt-8 hidden animate-fadeInUp">
+        <div class="text-center mb-4">
+          <img id="outputGambar" src="" alt="Gambar Produk" class="mx-auto rounded-lg shadow h-32 object-cover mb-2 hidden" />
+      <div class="text-center mb-4">
+        <div class="inline-block p-2 bg-green-100 rounded-full mb-2">
+          <i class="fas fa-check-circle text-green-600 text-2xl"></i>
+        </div>
+        <h2 class="text-2xl font-bold text-gray-800">Hasil Perhitungan</h2>
+      </div>
+      <div class="bg-gradient-to-br from-purple-50 to-indigo-50 rounded-xl p-6 shadow-inner">
+        <div class="space-y-4">
+          <div class="bg-white rounded-lg p-4 shadow-sm flex items-center justify-between">
+            <div class="flex items-center">
+              <i class="fas fa-tag text-purple-500 text-xl mr-3"></i>
+              <span class="font-semibold text-gray-700">Nama Produk</span>
+            </div>
+            <span class="font-bold text-gray-900" id="outNamaProduk"></span>
+          </div>
+          <div class="bg-white rounded-lg p-4 shadow-sm flex items-center justify-between">
+            <div class="flex items-center">
+              <i class="fas fa-wallet text-blue-500 text-xl mr-3"></i>
+              <span class="font-semibold text-gray-700">Total Modal</span>
+            </div>
+            <span class="font-bold text-blue-600 text-lg" id="outTotalModal"></span>
+          </div>
+          <div class="bg-white rounded-lg p-4 shadow-sm flex items-center justify-between">
+            <div class="flex items-center">
+              <i class="fas fa-shopping-cart text-green-500 text-xl mr-3"></i>
+              <span class="font-semibold text-gray-700">Harga Jual/Porsi</span>
+            </div>
+            <span class="font-bold text-green-600 text-lg" id="outHargaJual"></span>
+          </div>
+          <div class="bg-gradient-to-r from-yellow-400 to-orange-500 rounded-lg p-4 shadow-md flex items-center justify-between">
+            <div class="flex items-center">
+              <i class="fas fa-coins text-white text-xl mr-3"></i>
+              <span class="font-semibold text-white">Total Keuntungan</span>
+            </div>
+            <span class="font-bold text-white text-xl" id="outTotalKeuntungan"></span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <script>
+    // Fungsi untuk memformat angka ke Rupiah
+    function formatRupiah(angka) {
+      return 'Rp ' + angka.toLocaleString('id-ID');
+    }
+
+      // Fungsi untuk format ribuan live pada input
+      function formatInputRupiah(input) {
+        let value = input.value.replace(/[^0-9]/g, '');
+        if (value === '') {
+          input.value = '';
+          input.setAttribute('data-value', '');
+          return;
+        }
+        input.value = parseInt(value, 10).toLocaleString('id-ID');
+        input.setAttribute('data-value', value);
+      }
+
+      // Event listener untuk input bahan baku dan biaya masak
+      document.getElementById('bahanBaku').addEventListener('input', function(e) {
+        formatInputRupiah(e.target);
+        simpanSementara();
+      });
+      document.getElementById('biayaMasak').addEventListener('input', function(e) {
+        formatInputRupiah(e.target);
+        simpanSementara();
+      });
+
+      // Preview gambar produk
+      document.getElementById('gambarProduk').addEventListener('change', function(e) {
+        const file = e.target.files[0];
+        if (file) {
+          const reader = new FileReader();
+          reader.onload = function(ev) {
+            document.getElementById('previewGambar').src = ev.target.result;
+            document.getElementById('previewGambar').classList.remove('hidden');
+          };
+          reader.readAsDataURL(file);
+        } else {
+          document.getElementById('previewGambar').src = '';
+          document.getElementById('previewGambar').classList.add('hidden');
+        }
+      });
+
+
+
+      // Fungsi untuk reset form dan hasil
+      function resetForm() {
+        document.getElementById('form').reset();
+        document.getElementById('output').classList.add('hidden');
+        document.getElementById('outNamaProduk').textContent = '';
+        document.getElementById('outTotalModal').textContent = '';
+        document.getElementById('outHargaJual').textContent = '';
+        document.getElementById('outTotalKeuntungan').textContent = '';
+          document.getElementById('previewGambar').src = '';
+          document.getElementById('previewGambar').classList.add('hidden');
+          document.getElementById('outputGambar').src = '';
+          document.getElementById('outputGambar').classList.add('hidden');
+      }
+
+    // Event listener untuk form submit
+    document.getElementById('form').addEventListener('submit', function(e) {
+      e.preventDefault();
+      // Ambil nilai input
+        const namaProduk = document.getElementById('namaProduk').value;
+        const bahanBaku = parseFloat(document.getElementById('bahanBaku').getAttribute('data-value') || '0');
+        const biayaMasak = parseFloat(document.getElementById('biayaMasak').getAttribute('data-value') || '0');
+        const margin = parseFloat(document.getElementById('margin').value) || 0;
+        const jumlahPorsi = parseInt(document.getElementById('jumlahPorsi').value) || 1;
+
+      // Hitung total modal
+      const totalModal = bahanBaku + biayaMasak;
+      // Hitung harga jual per porsi
+      const hargaJualPerPorsi = (totalModal * (1 + margin / 100)) / jumlahPorsi;
+      // Hitung total keuntungan
+      const totalKeuntungan = (hargaJualPerPorsi * jumlahPorsi) - totalModal;
+
+      // Tampilkan hasil ke tabel
+      document.getElementById('outNamaProduk').textContent = namaProduk;
+      document.getElementById('outTotalModal').textContent = formatRupiah(totalModal);
+      document.getElementById('outHargaJual').textContent = formatRupiah(hargaJualPerPorsi.toFixed(0));
+      document.getElementById('outTotalKeuntungan').textContent = formatRupiah(totalKeuntungan.toFixed(0));
+      document.getElementById('output').classList.remove('hidden');
+        // Tampilkan gambar di hasil
+        const gambarSrc = document.getElementById('previewGambar').src;
+        if (gambarSrc) {
+          document.getElementById('outputGambar').src = gambarSrc;
+          document.getElementById('outputGambar').classList.remove('hidden');
+        } else {
+          document.getElementById('outputGambar').src = '';
+          document.getElementById('outputGambar').classList.add('hidden');
+        }
+    });
+
+      // Event listener untuk tombol reset
+      document.getElementById('resetBtn').addEventListener('click', resetForm);
+
+      // Simpan setiap perubahan input
+
+  </script>
+</body>
+</html>
