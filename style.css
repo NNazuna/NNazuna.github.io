@@ -136,3 +136,43 @@ button, input[type="file"] {
 #savedProducts li:hover {
   background: #e0e7ff;
 }
+
+/* Dashboard Grid */
+.dashboard-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 2rem;
+  max-width: 1100px;
+}
+@media (min-width: 900px) {
+  .dashboard-grid {
+    grid-template-columns: 1fr 1fr;
+    align-items: start;
+  }
+}
+.about-card, .calc-card {
+  background: rgba(255,255,255,0.8);
+  box-shadow: 0 8px 32px 0 rgba(76, 81, 255, 0.10);
+  border-radius: 1.5rem;
+  border: 1px solid rgba(255,255,255,0.18);
+}
+
+/* Tabel Bahan Baku Dinamis */
+table#bahanTable {
+  border-collapse: separate;
+  border-spacing: 0;
+  background: rgba(255,255,255,0.95);
+  box-shadow: 0 2px 8px rgba(76, 81, 255, 0.05);
+}
+table#bahanTable th, table#bahanTable td {
+  border-bottom: 1px solid #e5e7eb;
+  padding: 0.5rem 0.75rem;
+}
+table#bahanTable th {
+  font-weight: 600;
+  color: #4f46e5;
+  background: #eef2ff;
+}
+table#bahanTable td {
+  background: #fff;
+}
