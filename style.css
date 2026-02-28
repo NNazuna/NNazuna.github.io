@@ -53,9 +53,13 @@ button, input[type="file"] {
   background: linear-gradient(90deg, #7c3aed 0%, #6366f1 100%);
   color: #fff;
   font-weight: 600;
+  transition: box-shadow 0.2s, transform 0.2s;
+  box-shadow: 0 2px 8px rgba(76, 81, 255, 0.08);
 }
 .btn-wiracalc:hover {
   background: linear-gradient(90deg, #6d28d9 0%, #4338ca 100%);
+  box-shadow: 0 4px 16px rgba(76, 81, 255, 0.15);
+  transform: scale(1.05);
 }
 
 /* Output Table Accent */
@@ -151,9 +155,9 @@ button, input[type="file"] {
   }
 }
 .about-card, .calc-card {
-  background: rgba(255,255,255,0.8);
-  box-shadow: 0 8px 32px 0 rgba(76, 81, 255, 0.10);
-  border-radius: 1.5rem;
+  background: rgba(255,255,255,0.85);
+  box-shadow: 0 4px 24px rgba(76, 81, 255, 0.10);
+  border-radius: 2rem;
   border: 1px solid rgba(255,255,255,0.18);
 }
 
@@ -161,8 +165,10 @@ button, input[type="file"] {
 table#bahanTable {
   border-collapse: separate;
   border-spacing: 0;
-  background: rgba(255,255,255,0.95);
+  background: rgba(255,255,255,0.98);
   box-shadow: 0 2px 8px rgba(76, 81, 255, 0.05);
+  border-radius: 1.2rem;
+  overflow: hidden;
 }
 table#bahanTable th, table#bahanTable td {
   border-bottom: 1px solid #e5e7eb;
@@ -175,4 +181,9 @@ table#bahanTable th {
 }
 table#bahanTable td {
   background: #fff;
+}
+#emptyBahanRow {
+  background: #f3f4f6;
+  color: #a0aec0;
+  font-style: italic;
 }
