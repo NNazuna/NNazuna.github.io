@@ -369,8 +369,9 @@ input.thousand-separator {
 .overflow-x-auto {
   width: 100%;
   overflow-x: auto;
+  background: #fff;
+  border-radius: 16px;
 }
-/* Mobile Card & Table */
 @media (max-width: 600px) {
   .fluid-card {
     width: 100vw;
@@ -389,5 +390,9 @@ input.thousand-separator {
   }
   h1, h2, h3 {
     font-size: 1.2rem !important;
+  }
+  .overflow-x-auto {
+    border-radius: 0;
+    padding: 0;
   }
 }

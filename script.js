@@ -270,10 +270,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // --- Export Gambar ---
   function exportIMG() {
-    // Pastikan laporan-digital tidak hidden
     const laporan = document.getElementById('laporan-digital');
-    const prevDisplay = laporan.style.display;
-    laporan.style.display = '';
+    syncExportTables();
+    const wasHidden = laporan.classList.contains('hidden');
+    laporan.classList.remove('hidden');
     html2canvas(laporan, {
       backgroundColor: '#fff',
       scale: 2,
@@ -283,15 +283,16 @@ document.addEventListener('DOMContentLoaded', () => {
       link.download = `WiraCalc-${outNamaProduk.textContent}.png`;
       link.href = canvas.toDataURL('image/png');
       link.click();
-      laporan.style.display = prevDisplay;
+      if (wasHidden) laporan.classList.add('hidden');
     });
   }
 
   // --- Export PDF ---
   function exportPDF() {
     const laporan = document.getElementById('laporan-digital');
-    const prevDisplay = laporan.style.display;
-    laporan.style.display = '';
+    syncExportTables();
+    const wasHidden = laporan.classList.contains('hidden');
+    laporan.classList.remove('hidden');
     html2canvas(laporan, {
       backgroundColor: '#fff',
       scale: 2,
@@ -305,20 +306,23 @@ document.addEventListener('DOMContentLoaded', () => {
       const pdfHeight = (imgProps.height * pdfWidth) / imgProps.width;
       pdf.addImage(imgData, 'PNG', 0, 0, pdfWidth, pdfHeight);
       pdf.save(`Laporan-${outNamaProduk.textContent}.pdf`);
-      laporan.style.display = prevDisplay;
+      if (wasHidden) laporan.classList.add('hidden');
     });
   }
 
   // --- Web Share API ---
   async function shareKeSosmed() {
     const laporan = document.getElementById('laporan-digital');
-    const prevDisplay = laporan.style.display;
-    laporan.style.display = '';
+    syncExportTables();
+    const wasHidden = laporan.classList.contains('hidden');
+    laporan.classList.remove('hidden');
     try {
       const canvas = await html2canvas(laporan, { backgroundColor: '#fff', scale: 2, useCORS: true });
       canvas.toBlob(async (blob) => {
         const file = new File([blob], `Laporan-WiraCalc.png`, { type: 'image/png' });
-        if (navigator.share && navigator.canShare && navigator.canShare({ files: [file] })) {
+        if (window.location.protocol !== 'https:') {
+          alert('Fitur share hanya aktif di koneksi aman (HTTPS).');
+        } else if (navigator.share && navigator.canShare && navigator.canShare({ files: [file] })) {
           await navigator.share({
             title: 'Laporan WiraCalc',
             text: `Hasil perhitungan biaya produksi untuk ${outNamaProduk.textContent}`,
@@ -327,10 +331,10 @@ document.addEventListener('DOMContentLoaded', () => {
         } else {
           alert('Fitur Share tidak didukung di browser ini. Silakan gunakan tombol Export.');
         }
-        laporan.style.display = prevDisplay;
+        if (wasHidden) laporan.classList.add('hidden');
       });
     } catch (err) {
-      laporan.style.display = prevDisplay;
+      if (wasHidden) laporan.classList.add('hidden');
       console.error('Share gagal:', err);
     }
   }
