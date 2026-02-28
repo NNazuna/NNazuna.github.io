@@ -247,108 +247,53 @@ document.addEventListener('DOMContentLoaded', () => {
     exportPorsi.textContent = document.getElementById('jumlahPorsi').value;
   }
 
-  // --- Event Listeners ---
-  addBahanRowBtn.addEventListener('click', () => {
-    bahanTableBody.appendChild(createRow('bahan'));
-    checkEmptyState('bahan');
-    hitungOtomatis();
-    saveToLocalStorage();
-  });
-  addOperasionalRowBtn.addEventListener('click', () => {
-    operasionalTableBody.appendChild(createRow('operasional'));
-    checkEmptyState('operasional');
-    hitungOtomatis();
-    saveToLocalStorage();
-  });
-
-  // Form input listeners for real-time calculation & save
-  ['margin', 'jumlahPorsi', 'namaProduk'].forEach(id => {
-    const el = document.getElementById(id);
-    if (el) {
-      el.addEventListener('input', () => { hitungOtomatis(); saveToLocalStorage(); });
-      el.addEventListener('change', () => { hitungOtomatis(); saveToLocalStorage(); });
+  // --- Fungsi Tambahan: Web Share API ---
+  async function shareHasil() {
+    try {
+      const canvas = await html2canvas(output, { backgroundColor: '#fff', scale: 2, useCORS: true });
+      canvas.toBlob(async (blob) => {
+        const file = new File([blob], `laporan-wiracalc.png`, { type: 'image/png' });
+        if (navigator.share) {
+          await navigator.share({
+            title: 'Laporan WiraCalc',
+            text: `Hasil perhitungan biaya produksi untuk ${outNamaProduk.textContent}`,
+            files: [file],
+          });
+        } else {
+          alert('Fitur Share tidak didukung di browser ini. Silakan gunakan tombol Export.');
+        }
+      });
+    } catch (err) {
+      console.error('Share gagal:', err);
     }
-  });
+  }
 
-  // --- Form Submit ---
-  form.addEventListener('submit', e => {
-    e.preventDefault();
-    outNamaProduk.textContent = document.getElementById('namaProduk').value;
-    // Gambar
-    if (previewGambar.src && !previewGambar.classList.contains('hidden')) {
-      outGambar.src = previewGambar.src;
-      outGambar.classList.remove('hidden');
-    } else {
-      outGambar.src = '';
-      outGambar.classList.add('hidden');
-    }
-    output.classList.remove('hidden');
-    window.scrollTo({ top: output.offsetTop - 40, behavior: 'smooth' });
-    syncExportTables();
-    saveToLocalStorage();
-  });
-
-  // --- Gambar Produk Preview ---
-  gambarProduk.addEventListener('change', e => {
-    const file = e.target.files[0];
-    if (file) {
-      const reader = new FileReader();
-      reader.onload = ev => {
-        previewGambar.src = ev.target.result;
-        previewGambar.classList.remove('hidden');
-      };
-      reader.readAsDataURL(file);
-    } else {
-      previewGambar.src = '';
-      previewGambar.classList.add('hidden');
-    }
-  });
-
-  // --- Reset ---
-  resetBtn.addEventListener('click', () => {
-    form.reset();
-    previewGambar.src = '';
-    previewGambar.classList.add('hidden');
-    outGambar.src = '';
-    outGambar.classList.add('hidden');
-    output.classList.add('hidden');
-    bahanTableBody.innerHTML = '';
-    operasionalTableBody.innerHTML = '';
-    checkEmptyState('bahan');
-    checkEmptyState('operasional');
-    hitungOtomatis();
-    saveToLocalStorage();
-  });
-
-  // --- Export Logic ---
+  // --- Export & Share Event Listeners ---
   document.getElementById('exportIMG').addEventListener('click', function() {
-    syncExportTables();
-    html2canvas(output, {
-      backgroundColor: '#fff',
-      scale: 2,
-      useCORS: true
-    }).then(canvas => {
+    html2canvas(output, { backgroundColor: '#fff', scale: 2, useCORS: true }).then(canvas => {
       const link = document.createElement('a');
-      link.download = 'wiracalc-laporan.png';
+      link.download = `WiraCalc-${outNamaProduk.textContent}.png`;
       link.href = canvas.toDataURL('image/png');
       link.click();
     });
   });
+
   document.getElementById('exportPDF').addEventListener('click', function() {
-    syncExportTables();
-    html2canvas(output, {
-      backgroundColor: '#fff',
-      scale: 2,
-      useCORS: true
-    }).then(canvas => {
+    html2canvas(output, { backgroundColor: '#fff', scale: 2, useCORS: true }).then(canvas => {
       const imgData = canvas.toDataURL('image/png');
-      const pdf = new jsPDF({ orientation: 'portrait', unit: 'px', format: 'a4' });
-      const pageWidth = pdf.internal.pageSize.getWidth();
-      const pageHeight = pdf.internal.pageSize.getHeight();
-      pdf.addImage(imgData, 'PNG', 0, 0, pageWidth, pageHeight);
-      pdf.save('wiracalc-laporan.pdf');
+      const { jsPDF } = window.jspdf;
+      const pdf = new jsPDF('p', 'mm', 'a4');
+      const imgProps = pdf.getImageProperties(imgData);
+      const pdfWidth = pdf.internal.pageSize.getWidth();
+      const pdfHeight = (imgProps.height * pdfWidth) / imgProps.width;
+      pdf.addImage(imgData, 'PNG', 0, 0, pdfWidth, pdfHeight);
+      pdf.save(`Laporan-${outNamaProduk.textContent}.pdf`);
     });
   });
+
+  // Share button event
+  const shareBtn = document.getElementById('shareBtn');
+  if (shareBtn) shareBtn.addEventListener('click', shareHasil);
 
   // --- Initial State ---
   loadFromLocalStorage();
