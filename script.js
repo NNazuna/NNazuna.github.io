@@ -2,8 +2,13 @@
 // ES6, murni client-side, tanpa database
 
 document.addEventListener('DOMContentLoaded', () => {
-  // --- Helper: Format Rupiah ---
+  // --- Helper: Format Rupiah & Thousand Separator ---
   const formatRupiah = num => 'Rp ' + Math.ceil(num).toLocaleString('id-ID');
+  const formatThousand = val => {
+    val = val.toString().replace(/\D/g, '');
+    return val.replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+  };
+  const parseThousand = val => parseInt(val.replace(/\./g, '')) || 0;
 
   // --- DOM Elements ---
   const bahanTableBody = document.getElementById('bahanTableBody');
@@ -21,6 +26,74 @@ document.addEventListener('DOMContentLoaded', () => {
   const previewGambar = document.getElementById('previewGambar');
   const gambarProduk = document.getElementById('gambarProduk');
   const resetBtn = document.getElementById('resetBtn');
+  // Export wrapper
+  const laporanDigital = document.getElementById('laporan-digital');
+  const exportBahanTableBody = document.getElementById('exportBahanTableBody');
+  const exportOperasionalTableBody = document.getElementById('exportOperasionalTableBody');
+  const exportMargin = document.getElementById('exportMargin');
+  const exportPorsi = document.getElementById('exportPorsi');
+
+  // --- LocalStorage Logic ---
+  const LS_KEY = 'wiracalc-data-v1';
+  function saveToLocalStorage() {
+    const data = {
+      namaProduk: document.getElementById('namaProduk').value,
+      margin: document.getElementById('margin').value,
+      jumlahPorsi: document.getElementById('jumlahPorsi').value,
+      bahan: Array.from(bahanTableBody.children).map(tr => {
+        const inputs = tr.querySelectorAll('input, select');
+        if (inputs.length === 4) {
+          return {
+            nama: inputs[0].value,
+            jumlah: inputs[1].value,
+            satuan: inputs[2].value,
+            harga: inputs[3].value
+          };
+        }
+      }).filter(Boolean),
+      operasional: Array.from(operasionalTableBody.children).map(tr => {
+        const inputs = tr.querySelectorAll('input, select');
+        if (inputs.length === 2) {
+          return {
+            nama: inputs[0].value,
+            modal: inputs[1].value
+          };
+        }
+      }).filter(Boolean)
+    };
+    localStorage.setItem(LS_KEY, JSON.stringify(data));
+  }
+  function loadFromLocalStorage() {
+    const data = JSON.parse(localStorage.getItem(LS_KEY) || '{}');
+    document.getElementById('namaProduk').value = data.namaProduk || '';
+    document.getElementById('margin').value = data.margin || '';
+    document.getElementById('jumlahPorsi').value = data.jumlahPorsi || '';
+    bahanTableBody.innerHTML = '';
+    operasionalTableBody.innerHTML = '';
+    if (Array.isArray(data.bahan)) {
+      data.bahan.forEach(item => {
+        const tr = createRow('bahan');
+        const inputs = tr.querySelectorAll('input, select');
+        inputs[0].value = item.nama;
+        inputs[1].value = item.jumlah;
+        inputs[2].value = item.satuan;
+        inputs[3].value = item.harga;
+        bahanTableBody.appendChild(tr);
+      });
+    }
+    if (Array.isArray(data.operasional)) {
+      data.operasional.forEach(item => {
+        const tr = createRow('operasional');
+        const inputs = tr.querySelectorAll('input, select');
+        inputs[0].value = item.nama;
+        inputs[1].value = item.modal;
+        operasionalTableBody.appendChild(tr);
+      });
+    }
+    checkEmptyState('bahan');
+    checkEmptyState('operasional');
+    hitungOtomatis();
+  }
 
   // --- Reusable Row Creation ---
   function createRow(type) {
@@ -29,30 +102,50 @@ document.addEventListener('DOMContentLoaded', () => {
     if (type === 'bahan') {
       tr.innerHTML = `
         <td><input type="text" class="w-full border rounded px-2 py-1" placeholder="Nama Bahan" required></td>
-        <td><input type="number" class="w-full border rounded px-2 py-1" min="0" step="any" placeholder="Jumlah" required></td>
+        <td><input type="text" class="w-full border rounded px-2 py-1 thousand-separator" min="0" step="any" placeholder="Jumlah" required></td>
         <td>
           <select class="w-full border rounded px-2 py-1">
             ${satuanOptions.map(opt => `<option value="${opt}">${opt}</option>`).join('')}
           </select>
         </td>
-        <td><input type="number" class="w-full border rounded px-2 py-1" min="0" step="any" placeholder="Harga" required></td>
+        <td><input type="text" class="w-full border rounded px-2 py-1 thousand-separator" min="0" step="any" placeholder="Harga" required></td>
         <td class="text-center">
           <button type="button" class="icon-btn remove-row" title="Hapus"><i class="fas fa-trash"></i></button>
         </td>
       `;
+      // Thousand separator for jumlah & harga
+      tr.querySelectorAll('input.thousand-separator').forEach(input => {
+        input.addEventListener('input', e => {
+          const caret = input.selectionStart;
+          let val = input.value.replace(/\./g, '');
+          input.value = formatThousand(val);
+          input.setSelectionRange(caret, caret);
+          hitungOtomatis();
+          saveToLocalStorage();
+        });
+      });
     } else if (type === 'operasional') {
       tr.innerHTML = `
         <td><input type="text" class="w-full border rounded px-2 py-1" placeholder="Nama Biaya" required></td>
-        <td><input type="number" class="w-full border rounded px-2 py-1" min="0" step="any" placeholder="Modal" required></td>
+        <td><input type="text" class="w-full border rounded px-2 py-1 thousand-separator" min="0" step="any" placeholder="Modal" required></td>
         <td class="text-center">
           <button type="button" class="icon-btn remove-row" title="Hapus"><i class="fas fa-trash"></i></button>
         </td>
       `;
+      tr.querySelector('input.thousand-separator').addEventListener('input', e => {
+        const input = e.target;
+        const caret = input.selectionStart;
+        let val = input.value.replace(/\./g, '');
+        input.value = formatThousand(val);
+        input.setSelectionRange(caret, caret);
+        hitungOtomatis();
+        saveToLocalStorage();
+      });
     }
     // Event listeners for input changes
     tr.querySelectorAll('input, select').forEach(el => {
-      el.addEventListener('input', hitungOtomatis);
-      el.addEventListener('change', hitungOtomatis);
+      el.addEventListener('input', () => { hitungOtomatis(); saveToLocalStorage(); });
+      el.addEventListener('change', () => { hitungOtomatis(); saveToLocalStorage(); });
     });
     // Remove row logic
     tr.querySelector('.remove-row').addEventListener('click', () => {
@@ -61,6 +154,7 @@ document.addEventListener('DOMContentLoaded', () => {
         tr.remove();
         checkEmptyState(type);
         hitungOtomatis();
+        saveToLocalStorage();
       }, 300);
     });
     return tr;
@@ -90,18 +184,20 @@ document.addEventListener('DOMContentLoaded', () => {
     // Total Bahan
     let totalBahan = 0;
     Array.from(bahanTableBody.children).forEach(tr => {
-      const inputs = tr.querySelectorAll('input');
-      if (inputs.length === 3) {
-        const jumlah = parseFloat(inputs[0].value) || 0;
-        const harga = parseFloat(inputs[2].value) || 0;
+      const inputs = tr.querySelectorAll('input, select');
+      if (inputs.length === 4) {
+        const jumlah = parseThousand(inputs[1].value);
+        const harga = parseThousand(inputs[3].value);
         totalBahan += jumlah * harga;
       }
     });
     // Total Operasional
     let totalOperasional = 0;
     Array.from(operasionalTableBody.children).forEach(tr => {
-      const input = tr.querySelector('input[type="number"]');
-      if (input) totalOperasional += parseFloat(input.value) || 0;
+      const inputs = tr.querySelectorAll('input, select');
+      if (inputs.length === 2) {
+        totalOperasional += parseThousand(inputs[1].value);
+      }
     });
     // Margin & Porsi
     const margin = parseFloat(document.getElementById('margin').value) || 0;
@@ -113,6 +209,43 @@ document.addEventListener('DOMContentLoaded', () => {
     outTotalModal.textContent = formatRupiah(totalModal);
     outHargaJual.textContent = formatRupiah(hargaJual);
     outTotalKeuntungan.textContent = formatRupiah(totalKeuntungan);
+    // Export Table Sync
+    syncExportTables();
+  }
+
+  // --- Export Table Sync ---
+  function syncExportTables() {
+    // Bahan
+    exportBahanTableBody.innerHTML = '';
+    Array.from(bahanTableBody.children).forEach(tr => {
+      const inputs = tr.querySelectorAll('input, select');
+      if (inputs.length === 4) {
+        const row = document.createElement('tr');
+        row.innerHTML = `
+          <td>${inputs[0].value}</td>
+          <td>${inputs[1].value}</td>
+          <td>${inputs[2].value}</td>
+          <td>${inputs[3].value}</td>
+        `;
+        exportBahanTableBody.appendChild(row);
+      }
+    });
+    // Operasional
+    exportOperasionalTableBody.innerHTML = '';
+    Array.from(operasionalTableBody.children).forEach(tr => {
+      const inputs = tr.querySelectorAll('input, select');
+      if (inputs.length === 2) {
+        const row = document.createElement('tr');
+        row.innerHTML = `
+          <td>${inputs[0].value}</td>
+          <td>${inputs[1].value}</td>
+        `;
+        exportOperasionalTableBody.appendChild(row);
+      }
+    });
+    // Margin & Porsi
+    exportMargin.textContent = document.getElementById('margin').value + ' %';
+    exportPorsi.textContent = document.getElementById('jumlahPorsi').value;
   }
 
   // --- Event Listeners ---
@@ -120,19 +253,21 @@ document.addEventListener('DOMContentLoaded', () => {
     bahanTableBody.appendChild(createRow('bahan'));
     checkEmptyState('bahan');
     hitungOtomatis();
+    saveToLocalStorage();
   });
   addOperasionalRowBtn.addEventListener('click', () => {
     operasionalTableBody.appendChild(createRow('operasional'));
     checkEmptyState('operasional');
     hitungOtomatis();
+    saveToLocalStorage();
   });
 
-  // Form input listeners for real-time calculation
+  // Form input listeners for real-time calculation & save
   ['margin', 'jumlahPorsi', 'namaProduk'].forEach(id => {
     const el = document.getElementById(id);
     if (el) {
-      el.addEventListener('input', hitungOtomatis);
-      el.addEventListener('change', hitungOtomatis);
+      el.addEventListener('input', () => { hitungOtomatis(); saveToLocalStorage(); });
+      el.addEventListener('change', () => { hitungOtomatis(); saveToLocalStorage(); });
     }
   });
 
@@ -150,6 +285,8 @@ document.addEventListener('DOMContentLoaded', () => {
     }
     output.classList.remove('hidden');
     window.scrollTo({ top: output.offsetTop - 40, behavior: 'smooth' });
+    syncExportTables();
+    saveToLocalStorage();
   });
 
   // --- Gambar Produk Preview ---
@@ -181,10 +318,39 @@ document.addEventListener('DOMContentLoaded', () => {
     checkEmptyState('bahan');
     checkEmptyState('operasional');
     hitungOtomatis();
+    saveToLocalStorage();
+  });
+
+  // --- Export Logic ---
+  document.getElementById('exportIMG').addEventListener('click', function() {
+    syncExportTables();
+    html2canvas(laporanDigital, {
+      backgroundColor: '#fff',
+      scale: 2,
+      useCORS: true
+    }).then(canvas => {
+      const link = document.createElement('a');
+      link.download = 'wiracalc-laporan.png';
+      link.href = canvas.toDataURL('image/png');
+      link.click();
+    });
+  });
+  document.getElementById('exportPDF').addEventListener('click', function() {
+    syncExportTables();
+    html2canvas(laporanDigital, {
+      backgroundColor: '#fff',
+      scale: 2,
+      useCORS: true
+    }).then(canvas => {
+      const imgData = canvas.toDataURL('image/png');
+      const pdf = new jsPDF({ orientation: 'portrait', unit: 'px', format: 'a4' });
+      const pageWidth = pdf.internal.pageSize.getWidth();
+      const pageHeight = pdf.internal.pageSize.getHeight();
+      pdf.addImage(imgData, 'PNG', 0, 0, pageWidth, pageHeight);
+      pdf.save('wiracalc-laporan.pdf');
+    });
   });
 
   // --- Initial State ---
-  checkEmptyState('bahan');
-  checkEmptyState('operasional');
-  hitungOtomatis();
+  loadFromLocalStorage();
 });
