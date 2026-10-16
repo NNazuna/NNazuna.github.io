@@ -1,12 +1,13 @@
 // Wiratama Service Worker for PWA
-const CACHE_NAME = 'wiracalc-v1';
+const CACHE_NAME = 'wiracalc-v2';
 const urlsToCache = [
   '/',
   '/index.html',
   '/style.css',
   '/script.js',
   '/manifest.json',
-  // Tambahkan icon jika ada
+  '/icon-192.png',
+  '/icon-512.png',
 ];
 
 self.addEventListener('install', event => {
