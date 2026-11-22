@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="NNAZUNA">
+  <rect width="64" height="64" rx="10" fill="#09090b"/>
+  <path d="M14 46V18h7l14 19V18h6v28h-7L20 27v19z" fill="#fafafa"/>
+  <rect x="45" y="42" width="9" height="4" fill="#22c55e"/>
+</svg>
