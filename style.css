@@ -188,14 +188,23 @@ body {
 }
 
 .hero h1.hero-name {
-    font-size: clamp(2.35rem, 4.6vw, 3.9rem);
-    line-height: 0.98;
-    letter-spacing: -0.055em;
-    margin-bottom: 0.9rem;
+    font-size: clamp(3.6rem, 9vw, 7rem);
+    line-height: 0.9;
+    letter-spacing: -0.06em;
+    margin-bottom: 0.35rem;
 }
 
 .hero-name .accent {
     color: var(--accent);
+}
+
+.hero-realname {
+    font-family: var(--font-mono);
+    font-size: 0.8rem;
+    letter-spacing: 0.1em;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    margin-bottom: 1.25rem;
 }
 
 .hero-role {
