@@ -388,6 +388,28 @@ body {
     margin-bottom: 2rem;
 }
 
+.project-origin {
+    border-left: 2px solid var(--accent);
+    padding-left: 1.25rem;
+    margin: 1.5rem 0 1.75rem;
+    max-width: 70ch;
+}
+
+.origin-label {
+    display: block;
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    letter-spacing: 0.14em;
+    color: var(--accent);
+    margin-bottom: 0.5rem;
+}
+
+.project-origin p {
+    font-size: 1.05rem;
+    color: var(--text-primary);
+    line-height: 1.6;
+}
+
 .project-metrics {
     display: flex;
     gap: 3rem;
