@@ -187,6 +187,26 @@ body {
     margin-bottom: 1.5rem;
 }
 
+.hero h1.hero-name {
+    font-size: clamp(2.35rem, 4.6vw, 3.9rem);
+    line-height: 0.98;
+    letter-spacing: -0.055em;
+    margin-bottom: 0.9rem;
+}
+
+.hero-name .accent {
+    color: var(--accent);
+}
+
+.hero-role {
+    font-family: var(--font-mono);
+    font-size: 0.78rem;
+    letter-spacing: 0.14em;
+    color: var(--accent);
+    text-transform: uppercase;
+    margin-bottom: 1.5rem;
+}
+
 .hero-quote {
     font-family: 'Manrope', sans-serif;
     font-style: italic;
@@ -206,6 +226,7 @@ body {
 
 .hero-actions {
     display: flex;
+    flex-wrap: wrap;
     gap: 1rem;
 }
 
@@ -435,6 +456,7 @@ body {
 
 .contact-actions {
     display: flex;
+    flex-wrap: wrap;
     justify-content: center;
     gap: 1rem;
 }
@@ -473,5 +495,18 @@ body {
     }
     .nav-toggle {
         display: block;
+    }
+    .footer-flex {
+        flex-direction: column;
+        gap: 0.5rem;
+    }
+}
+
+@media (max-width: 520px) {
+    .hero-actions, .contact-actions {
+        flex-direction: column;
+    }
+    .btn {
+        justify-content: center;
     }
 }
