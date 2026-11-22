@@ -18,4 +18,4 @@ Informatics student at Universitas Islam Indonesia. Building Android automation 
 ## Support
 
 - Ko-fi: https://ko-fi.com/nnazuna
-- Saweria: https://saweria.co/SenaCuna
+- Saweria: https://saweria.co/nnazuna
