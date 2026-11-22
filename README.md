@@ -19,3 +19,4 @@ Informatics student at Universitas Islam Indonesia. Building Android automation 
 
 - Ko-fi: https://ko-fi.com/nnazuna
 - Saweria: https://saweria.co/nnazuna
+- Trakteer: https://trakteer.id/dedhanof_afp
