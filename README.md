@@ -13,7 +13,6 @@ Informatics student at Universitas Islam Indonesia. Building Android automation 
 - Portfolio: https://nnazuna.me
 - Email: dedhanof@gmail.com
 - NNA Clicker: https://github.com/NNazuna/nna-clicker
-- nnareplay: https://github.com/NNazuna/nnareplay
 - GitHub: https://github.com/NNazuna
 
 ## Support
