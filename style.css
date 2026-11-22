@@ -338,9 +338,15 @@ body {
     position: relative;
 }
 
+.project-card + .project-card {
+    margin-top: 2rem;
+}
+
 .project-meta {
     display: flex;
-    gap: 1rem;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.5rem 1rem;
     margin-bottom: 1.5rem;
     font-family: var(--font-mono);
     font-size: 0.75rem;
